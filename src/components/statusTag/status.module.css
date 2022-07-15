@@ -1,0 +1,32 @@
+.success{
+    border-radius: 4px;
+    padding: 2px 6px;
+    color: rgb(34, 154, 22);
+    background-color: rgba(84, 214, 44, 0.16);
+    font-size: 13px;
+}
+
+.error{
+    border-radius: 4px;
+    padding: 2px 6px;
+    background-color: rgba(255, 72, 66, 0.16);
+    color: rgb(183, 33, 54);
+    font-size: 13px;
+}
+
+.default{
+    border-radius: 4px;
+    padding: 2px 6px;
+    background-color: rgb(244, 246, 248);
+    color: #4b494f;
+    font-size: 13px;
+}
+
+
+.warning{
+    border-radius: 4px;
+    padding: 2px 6px;
+    color: rgb(183, 129, 3);
+    background-color: rgba(255, 193, 7, 0.16); 
+    font-size: 13px;
+}

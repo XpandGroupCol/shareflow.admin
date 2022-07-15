@@ -1,0 +1,11 @@
+.rowFields {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+}
+
+@media screen and (max-width: 600px) {
+    .rowFields {
+       flex-direction: column;
+    }
+}

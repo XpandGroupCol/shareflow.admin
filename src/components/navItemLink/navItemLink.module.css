@@ -1,0 +1,16 @@
+.link{
+    color: #ffffffb3;
+}
+
+.link svg{
+    color:  #ffffffb3;
+}
+
+.active{
+    background-color: #461abf;
+    color: white;
+}
+
+.active svg {
+    color:white;
+}
