@@ -222,7 +222,6 @@ const EditClientForm = ({ user }) => {
             error={Boolean(errors?.phone?.message)}
             helperText={errors?.phone?.message}
             onBlur={(error) => {
-              console.log({ error })
               if (error) {
                 setError('phone', { type: 'custom', message: 'El numero de telefono no es valido' })
               } else {

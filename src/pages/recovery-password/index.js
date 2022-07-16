@@ -15,6 +15,7 @@ import { useChangePassword } from 'hooks/useChangePassword'
 
 import { recoveryPassword } from 'services/auth'
 import { defaultValues, schema } from './schema'
+import NotFoundPage from 'pages/not-found'
 
 const RecoveryPasswordPage = () => {
   const { formState: { errors }, handleSubmit, control } = useForm({
@@ -40,7 +41,7 @@ const RecoveryPasswordPage = () => {
 
   if (loading) return <LoadingPage text='Verificando los datos ...' />
 
-  if (isError) return <h1>Error page</h1>
+  if (isError) return <NotFoundPage />
 
   return (
     <AuthLayout text='Cambia tu contraseña'>

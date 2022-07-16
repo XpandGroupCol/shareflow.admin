@@ -18,6 +18,8 @@ import { useNotify } from 'hooks/useNotify'
 import { deleteAge } from 'services/ages'
 import { mutateLocalState } from 'utils/mutateLocalState'
 import { AGES } from 'configs/queryKeys'
+import EmptyData from 'components/emptyData'
+import ErrorRequest from 'components/errorRequest'
 
 const ListTable = () => {
   const { queryString, queryParams, setQueryParams } = useQueryParams()
@@ -62,9 +64,9 @@ const ListTable = () => {
 
   if (isLoading) return <LoadingTable />
 
-  if (isError) return <h1>Error</h1>
+  if (isError) return <ErrorRequest />
 
-  if (!items.length) return <h1>Empty</h1>
+  if (!items.length) return <EmptyData />
 
   return (
     <>

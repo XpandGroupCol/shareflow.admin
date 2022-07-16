@@ -15,8 +15,6 @@ const EditPublisherPage = () => {
 
   const { data: publisher } = data
 
-  console.log({ publisher })
-
   return <EditPublisher publisher={publisher} ages={ages} formats={formats} targets={targets} />
 }
 

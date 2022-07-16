@@ -1,7 +1,7 @@
 import { useFieldArray, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { Box, IconButton } from '@mui/material'
+import { Box, Divider, IconButton } from '@mui/material'
 import ControllerField from 'components/controllerField'
 import Typography from 'components/typography'
 import { defaultValues, schema } from './schema'
@@ -12,7 +12,7 @@ import Select from 'components/select'
 import { BIDDING_MODEL, DEVICE, PUBLISHER_CATEGORY, SEX_LIST } from 'configs/lists'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import CurrencyInput from 'components/currencyInput'
 import Autocomplete from 'components/autocomplete'
 import CloseIcon from '@mui/icons-material/Close'
@@ -24,8 +24,6 @@ import { normalizeFormats } from 'utils/publishersFormat'
 import ChangeAvatar from 'components/changeAvatar'
 
 const EditPublisher = ({ publisher, ages, formats, targets }) => {
-  console.log({ publisher })
-
   const { formState: { errors }, handleSubmit, control } = useForm({
     defaultValues: publisher?._id ? { ...publisher } : { ...defaultValues },
     resolver: yupResolver(schema)
@@ -101,8 +99,6 @@ const EditPublisher = ({ publisher, ages, formats, targets }) => {
     // aqui se debe llamar al back
     setLogo({ url: '', name: '' })
   }
-
-  console.log({ errors })
 
   return (
     <>
@@ -180,74 +176,97 @@ const EditPublisher = ({ publisher, ages, formats, targets }) => {
               helperText={errors?.category?.message}
             />
           </div>
-          <Button onClick={handleAdded}>
-            agregar
-          </Button>
+          <Divider />
+          <div className={styles.publisherTitle}>
+            <Typography fontSize={20} fontWeight='bold'>Publishers</Typography>
+            <Button onClick={handleAdded}>
+              agregar
+            </Button>
 
+          </div>
           {
                  fields.map(({
                    id
                  }, index) => (
-                   <div key={id}>
+                   <Fragment key={id}>
+                     <div className={styles.rowContainer}>
+                       <div className={styles.tableRow}>
+                         <div>
+                           <ControllerField
+                             name={`formats.${index}.format`}
+                             label='Formato'
+                             size='normal'
+                             control={control}
+                             element={Autocomplete}
+                             options={formats}
+                             error={Boolean(errors?.formats?.[index]?.format?.message)}
+                             helperText={`${errors?.formats?.[index]?.format?.message || ''}`}
+                           />
+                         </div>
 
-                     <ControllerField
-                       name={`formats.${index}.format`}
-                       label='Formato'
-                       control={control}
-                       element={Autocomplete}
-                       options={formats}
-                       error={Boolean(errors?.formats?.[index]?.format?.message)}
-                       helperText={`${errors?.formats?.[index]?.format?.message || ''}`}
-                     />
+                         <div>
+                           <ControllerField
+                             name={`formats.${index}.target`}
+                             label='Objetivo'
+                             size='normal'
+                             control={control}
+                             element={Autocomplete}
+                             options={targets}
+                             error={Boolean(errors?.formats?.[index]?.target?.message)}
+                             helperText={`${errors?.formats?.[index]?.target?.message || ''}`}
+                           />
+                         </div>
 
-                     <ControllerField
-                       name={`formats.${index}.target`}
-                       label='Objetivo'
-                       control={control}
-                       element={Autocomplete}
-                       options={targets}
-                       error={Boolean(errors?.formats?.[index]?.target?.message)}
-                       helperText={`${errors?.formats?.[index]?.target?.message || ''}`}
-                     />
+                         <div>
+                           <ControllerField
+                             name={`formats.${index}.biddingModel`}
+                             label='Modelo'
+                             size='normal'
+                             control={control}
+                             element={Select}
+                             options={BIDDING_MODEL}
+                             error={Boolean(errors?.formats?.[index]?.biddingModel?.message)}
+                             helperText={`${errors?.formats?.[index]?.biddingModel?.message || ''}`}
+                           />
 
-                     <ControllerField
-                       name={`formats.${index}.biddingModel`}
-                       label='Modelo'
-                       control={control}
-                       element={Select}
-                       options={BIDDING_MODEL}
-                       error={Boolean(errors?.formats?.[index]?.biddingModel?.message)}
-                       helperText={`${errors?.formats?.[index]?.biddingModel?.message || ''}`}
-                     />
+                         </div>
+                         <div>
+                           <ControllerField
+                             name={`formats.${index}.device`}
+                             label='Dispositivos'
+                             size='normal'
+                             control={control}
+                             element={Select}
+                             options={DEVICE}
+                             error={Boolean(errors?.formats?.[index]?.device?.message)}
+                             helperText={`${errors?.formats?.[index]?.device?.message || ''}`}
+                           />
+                         </div>
 
-                     <ControllerField
-                       name={`formats.${index}.device`}
-                       label='Dispositivos'
-                       control={control}
-                       element={Select}
-                       options={DEVICE}
-                       error={Boolean(errors?.formats?.[index]?.device?.message)}
-                       helperText={`${errors?.formats?.[index]?.device?.message || ''}`}
-                     />
+                         <div>
+                           <ControllerField
+                             name={`formats.${index}.pricePerUnit`}
+                             label='Precio unitario'
+                             size='normal'
+                             control={control}
+                             element={CurrencyInput}
+                             error={Boolean(errors?.formats?.[index]?.pricePerUnit?.message)}
+                             helperText={`${errors?.formats?.[index]?.pricePerUnit?.message || ''}`}
+                           />
+                         </div>
 
-                     <ControllerField
-                       name={`formats.${index}.pricePerUnit`}
-                       label='Precio unitario'
-                       control={control}
-                       element={CurrencyInput}
-                       error={Boolean(errors?.formats?.[index]?.pricePerUnit?.message)}
-                       helperText={`${errors?.formats?.[index]?.pricePerUnit?.message || ''}`}
-                     />
-
-                     <IconButton size='small' className={styles.deleteIcon} onClick={handleRemove(index)}>
-                       <CloseIcon />
-                     </IconButton>
-                   </div>
+                       </div>
+                       <IconButton size='small' className={styles.deleteIcon} onClick={handleRemove(index)}>
+                         <CloseIcon />
+                       </IconButton>
+                     </div>
+                     <Divider />
+                   </Fragment>
                  ))
 }
 
           <Box sx={{ display: 'flex', gap: '20px', marginTop: '20px', justifyContent: 'center' }}>
-            <Link to='/users'>
+            <Link to='/publishers'>
               <Button sx={{ minWidth: '200px' }} component='span' variant='outlined' type='button'>
                 Cancelar
               </Button>

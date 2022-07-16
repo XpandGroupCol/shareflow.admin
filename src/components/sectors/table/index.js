@@ -15,6 +15,8 @@ import { useMutation, useQueryClient } from 'react-query'
 import { deleteSector } from 'services/sectors'
 import { mutateLocalState } from 'utils/mutateLocalState'
 import { SECTORS } from 'configs/queryKeys'
+import EmptyData from 'components/emptyData'
+import ErrorRequest from 'components/errorRequest'
 
 const ListTable = () => {
   const { queryString, queryParams, setQueryParams } = useQueryParams()
@@ -59,9 +61,9 @@ const ListTable = () => {
 
   if (isLoading) return <LoadingTable />
 
-  if (isError) return <h1>Error</h1>
+  if (isError) return <ErrorRequest />
 
-  if (!sectors.length) return <h1>Empty</h1>
+  if (!sectors.length) return <EmptyData />
 
   return (
     <>

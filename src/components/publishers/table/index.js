@@ -14,6 +14,8 @@ import { mutateLocalState } from 'utils/mutateLocalState'
 import { PUBLISHERS } from 'configs/queryKeys'
 import { useGetPublishers } from 'hooks/useGetPublishers'
 import { deletePublisher } from 'services/publishers'
+import EmptyData from 'components/emptyData'
+import ErrorRequest from 'components/errorRequest'
 
 const ListTable = () => {
   const { queryString, queryParams, setQueryParams } = useQueryParams()
@@ -53,9 +55,9 @@ const ListTable = () => {
 
   if (isLoading) return <LoadingTable />
 
-  if (isError) return <h1>Error</h1>
+  if (isError) return <ErrorRequest />
 
-  if (!publishers.length) return <h1>Empty</h1>
+  if (!publishers.length) return <EmptyData />
 
   return (
     <>

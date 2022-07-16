@@ -8,6 +8,8 @@ import ItemRow from './row'
 import { columns } from './colums'
 import { useGetInvitation } from 'hooks/useGetInvitation'
 import { useSendEmail } from 'hooks/useSendEmail'
+import EmptyData from 'components/emptyData'
+import ErrorRequest from 'components/errorRequest'
 
 const ListTable = () => {
   const { queryString, queryParams, setQueryParams } = useQueryParams()
@@ -24,9 +26,9 @@ const ListTable = () => {
 
   if (isLoading) return <LoadingTable />
 
-  if (isError) return <h1>Error</h1>
+  if (isError) return <ErrorRequest />
 
-  if (!invitations.length) return <h1>Empty</h1>
+  if (!invitations.length) return <EmptyData />
 
   const onSend = ({ _id }) => () => {
     send(_id)

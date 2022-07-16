@@ -15,6 +15,8 @@ import { mutateLocalState } from 'utils/mutateLocalState'
 import { USERS } from 'configs/queryKeys'
 import { useGetUsers } from 'hooks/useGetUsers'
 import { deleteUser } from 'services/users'
+import EmptyData from 'components/emptyData'
+import ErrorRequest from 'components/errorRequest'
 
 const ListTable = () => {
   const { queryString, queryParams, setQueryParams } = useQueryParams()
@@ -54,9 +56,9 @@ const ListTable = () => {
 
   if (isLoading) return <LoadingTable />
 
-  if (isError) return <h1>Error</h1>
+  if (isError) return <ErrorRequest />
 
-  if (!sectors.length) return <h1>Empty</h1>
+  if (!sectors.length) return <EmptyData />
 
   return (
     <>
