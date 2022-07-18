@@ -1,4 +1,4 @@
-import * as React from 'react'
+
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 
@@ -10,17 +10,36 @@ import Toolbar from '@mui/material/Toolbar'
 
 import { LogoIcon } from 'assets/icons'
 import DrawerItems from './drawerItems'
-
+import { useState } from 'react'
+import { Divider, Menu, MenuItem } from '@mui/material'
+import Typography from 'components/typography'
+import Avatar from 'components/avatar'
+import { Link } from 'react-router-dom'
+import PersonIcon from '@mui/icons-material/Person'
+import LogoutIcon from '@mui/icons-material/Logout'
+import styles from './auth.module.css'
+import { useSession } from 'providers/SessionProvider'
+import { logout } from 'services/auth'
 const drawerWidth = 250
 
 export default function Layout ({ children }) {
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const { user } = useSession()
 
   const handleDrawerToggle = (bool) => () => {
     setMobileOpen(bool)
   }
 
+  const handleClick = (event) =>
+    setAnchorEl(event.currentTarget)
+
+  const handleClose = () =>
+    setAnchorEl(null)
+
   const container = window !== undefined ? window.document.body : undefined
+
+  const open = Boolean(anchorEl)
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -33,19 +52,82 @@ export default function Layout ({ children }) {
           boxShadow: 'rgb(34 51 84 / 10%) 0px 2px 4px -3px, rgb(34 51 84 / 5%) 0px 5px 12px -4px'
         }}
       >
-        <Toolbar sx={{ height: '64px', background: 'white', display: 'flex', alignItems: 'center' }}>
-          <IconButton
-            color='primary'
-            aria-label='open drawer'
-            edge='start'
-            onClick={handleDrawerToggle(true)}
-            sx={{ mr: 2, display: { md: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Box component='span' sx={{ display: { md: 'none', xs: 'flex' }, alignItems: 'center' }}>
-            <LogoIcon width={120} color='#4b494f' />
+        <Toolbar sx={{ height: '64px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton
+              color='primary'
+              aria-label='open drawer'
+              edge='start'
+              onClick={handleDrawerToggle(true)}
+              sx={{ mr: 2, display: { md: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Box component='span' sx={{ display: { md: 'none', xs: 'flex' }, alignItems: 'center' }}>
+              <LogoIcon width={120} color='#4b494f' />
+            </Box>
           </Box>
+          <button onClick={handleClick} className={styles.logout}>
+            <div className={styles.userInfo}>
+              <Typography sx={{
+                maxWidth: '150px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                fontSize: 14,
+                fontWeight: 'bold'
+              }}
+              >{user?.name}
+              </Typography>
+              <Typography color='gray' sx={{ fontSize: 12, textAlign: 'right' }}>{user?.role}</Typography>
+            </div>
+            <Avatar src={user?.image} label={user?.name} sx={{ width: 36, height: 36 }} />
+
+          </button>
+          <Menu
+            id='header-menu'
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button'
+            }}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            sx={{
+              '& .MuiPaper-root': {
+                boxShadow: 'rgb(0 0 0 / 10%) 0px 4px 12px',
+                paddingTop: '15px'
+              }
+            }}
+          >
+            <MenuItem sx={{ gap: '20px' }}>
+              <div>
+                <Typography fontWeight='bold'>{user?.name}
+                </Typography>
+                <Typography color='gray' sx={{ fontSize: 12 }}>{user?.role}</Typography>
+              </div>
+              <Avatar src={user?.image} label={user?.name} sx={{ width: 36, height: 36 }} />
+            </MenuItem>
+            <Divider />
+            <Link to='/profile'>
+              <MenuItem component='a' onClick={handleClose}>
+                <PersonIcon fontSize='small' sx={{ marginRight: '10px' }} />
+                Perfil
+              </MenuItem>
+            </Link>
+            <Divider />
+            <MenuItem onClick={logout}>
+              <LogoutIcon fontSize='small' sx={{ marginRight: '10px' }} />
+              Cerrar sesion
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Box

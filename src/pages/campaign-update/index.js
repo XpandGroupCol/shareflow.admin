@@ -1,5 +1,7 @@
 import CampaignEditForm from 'components/campaigns/edit'
+import LoadingPage from 'components/loadingPage'
 import { useGlobalCampaigns } from 'providers/CampaingProvider'
+import { Navigate } from 'react-router-dom'
 
 const CampaignUpdatePage = () => {
   const {
@@ -10,8 +12,11 @@ const CampaignUpdatePage = () => {
     lists
   } = useGlobalCampaigns()
 
-  if (loading) return <h1>Cargando...</h1>
-  if (error) return <h1>Error</h1>
+  if (loading) return <LoadingPage text='Buscando campaña ...' />
+  if (error) {
+    <Navigate to='/campaigns' />
+    return
+  }
 
   return (
     <CampaignEditForm

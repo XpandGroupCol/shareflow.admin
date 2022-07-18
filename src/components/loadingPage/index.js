@@ -12,7 +12,9 @@ const LoadingPage = ({ text = 'Sincronizando datos ...' }) => {
       left: 0,
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      background: 'white',
+      zIndex: 2000000
     }}
     >
       <Box sx={{

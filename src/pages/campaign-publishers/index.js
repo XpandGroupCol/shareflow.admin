@@ -1,4 +1,5 @@
 import CampaignPublisherForm from 'components/campaignPublisherForm'
+import LoadingPage from 'components/loadingPage'
 import { MAX_SHARE_VALUE } from 'configs'
 import { useNotify } from 'hooks/useNotify'
 import { useGlobalCampaigns } from 'providers/CampaingProvider'
@@ -14,9 +15,11 @@ const CampaignPublisherPage = () => {
 
   const { isLoading, mutateAsync } = useMutation(updateCampaign)
 
-  if (loading) return <h1>loading</h1>
-
-  if (error) return <h1>Error</h1>
+  if (loading) return <LoadingPage text='Buscando campaña ...' />
+  if (error) {
+    <Navigate to='/campaigns' />
+    return
+  }
 
   if (!globalCampaign?.listOffPublishers?.length) return <Navigate to={`/campaigns/${id}/edit`} />
 

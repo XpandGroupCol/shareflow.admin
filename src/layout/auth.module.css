@@ -40,3 +40,12 @@
     width: 100%;
     color: #4b494f;
 }
+
+.logout{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
