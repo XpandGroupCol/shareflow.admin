@@ -69,7 +69,6 @@ const ListTable = () => {
             {sectors.map((item) => (
               <ItemRow
                 onDelete={toggleModalDelete}
-                onEdit={() => {}}
                 key={item._id}
                 item={item}
               />

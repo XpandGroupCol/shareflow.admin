@@ -36,6 +36,8 @@ const SessionProvider = ({ children }) => {
     }
   }, [notify])
 
+  console.log({ session })
+
   return (
     <SessionContext.Provider value={{ ...session, signIn }}>
       {children}

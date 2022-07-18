@@ -17,12 +17,14 @@ const NavCollapseLink = ({ items = [], basePath, text, icon: Icon, onClose }) =>
   const { pathname } = useLocation()
   const [open, setOpen] = useState(Boolean(pathname.includes(basePath)))
 
+  console.log({ pathname, basePath })
+
   const handleClick = () => {
     setOpen(!open)
   }
 
   useEffect(() => {
-    setOpen(Boolean(pathname.includes(basePath)))
+    setOpen(Boolean(pathname.startsWith(`/${basePath}`)))
   }, [pathname, basePath])
 
   return (
@@ -37,7 +39,7 @@ const NavCollapseLink = ({ items = [], basePath, text, icon: Icon, onClose }) =>
         }}
       >
         <ListItemIcon sx={{ minWidth: '36px' }}>
-          <Icon fontSize='small' sx={{ color: pathname.includes(basePath) || open ? 'white' : '#ffffffb3' }} />
+          <Icon fontSize='small' sx={{ color: pathname.startsWith(basePath) || open ? 'white' : '#ffffffb3' }} />
         </ListItemIcon>
         <ListItemText primary={text} />
         {open ? <ExpandLess /> : <ExpandMore />}
