@@ -29,8 +29,6 @@ const CampaignPublisherPage = () => {
       return notify.error(`La sumatoria total del share entre todos los medios es de ${share}% y debe ser igual ${MAX_SHARE_VALUE}%`)
     }
 
-    console.log({ restOfValues })
-
     const data = clearCampaign({ ...restOfValues, publishers })
 
     const summary = getSummaryInformation(values)

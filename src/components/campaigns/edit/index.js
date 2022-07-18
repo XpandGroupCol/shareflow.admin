@@ -28,8 +28,6 @@ const CampaignEditForm = ({ campaign, ages, sectors, targets, updateCampaign }) 
     resolver: yupResolver(schema)
   })
 
-  console.log({ campaign })
-
   const navigate = useNavigate()
   const notify = useNotify()
 
@@ -59,8 +57,6 @@ const CampaignEditForm = ({ campaign, ages, sectors, targets, updateCampaign }) 
   }
 
   const onSubmit = (values) => {
-    console.log({ values })
-
     const campaignState = campaign
     const { amount, target, listOffPublishers = [] } = campaignState
     const path = `/campaigns/${campaign?._id}/publishers`
@@ -78,8 +74,6 @@ const CampaignEditForm = ({ campaign, ages, sectors, targets, updateCampaign }) 
         if (rows === undefined) {
           rows = listOffPublishers.filter(({ id }) => publishers.some(({ rowId }) => id === rowId))
         }
-
-        console.log({ rows, listOffPublishers })
 
         if (amount !== values.amount || target?.value !== values.target?.value) {
           clearPublishers = true

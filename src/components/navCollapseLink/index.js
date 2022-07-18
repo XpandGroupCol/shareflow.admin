@@ -17,8 +17,6 @@ const NavCollapseLink = ({ items = [], basePath, text, icon: Icon, onClose }) =>
   const { pathname } = useLocation()
   const [open, setOpen] = useState(Boolean(pathname.includes(basePath)))
 
-  console.log({ pathname, basePath })
-
   const handleClick = () => {
     setOpen(!open)
   }
