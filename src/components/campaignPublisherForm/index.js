@@ -1,4 +1,4 @@
-import { IconButton, Divider } from '@mui/material'
+import { IconButton, Divider, Box } from '@mui/material'
 import Autocomplete from 'components/autocomplete'
 import Button from 'components/button'
 import Typography from 'components/typography'
@@ -122,72 +122,82 @@ const CampaignPublisherForm = ({ initValues, onBack, onSubmit, href, loading }) 
   const disabledButton = Boolean(!formState?.publishers.length || Object.keys(errors).length)
 
   return (
-    <section className={styles.publishers}>
-      <div className={styles.media}>
-        <section className={styles.newCampaignHeader}>
-          {/* <BackButton href={href} onBack={handleOnBack} /> */}
-          <Typography fontSize='20px' fontWeight='bold'>Objetivo y Presupuesto</Typography>
-        </section>
-        <div className={styles.filters}>
-          <Autocomplete
-            id='combo-box-demo'
-            options={initValues?.listOffPublishers || []}
-            fullWidth
-            label='Medios'
-            multiple
-            size='smaill'
-            groupBy={(option) => option.groupBy}
-            value={rows}
-            onChange={handleOnChangePublisher}
-          />
-        </div>
-        <Divider sx={{ width: '100%', marginBottom: '20px' }} />
-        <Typography fontSize='14px' align='center' sx={{ marginBottom: '24px' }}>Segmentación inicial para la campaña</Typography>
-        {!fields.length && <Typography fontSize='12px' align='center' sx={{ color: '#5b595f', margin: '30px 0' }}>Ningun medio seleccionado</Typography>}
-        <form className={styles.form}>
-          {fields.map((publisher, index) => (
-            <PublisherCard
-              key={publisher.id}
-              name={`publishers.${index}.share`}
-              deleteRow={handleDeleteRow(index, publisher?.rowId)}
-              onBlur={handleSetShare(index)}
-              control={control}
-              error={Boolean(errors?.publishers && errors?.publishers[index]?.share?.message)}
-              helperText={errors?.publishers && errors?.publishers[index]?.share?.message}
-              {...publisher}
-            />
-          ))}
-          <Divider sx={{ width: '100%', marginBottom: '20px' }} />
-          <div className={styles.buttonContainer}>
-            <Button size='large' disabled={disabledButton} variant='contained' onClick={handleSubmit(onSubmit)} loading={loading}>Guardar campaña</Button>
+    <>
+      <section className='headerSection'>
+        <Typography fontSize='24px' component='h2' fontWeight='bold'>Objetivo y Presupuesto</Typography>
+      </section>
+
+      <Box sx={{
+        width: '90%',
+        maxWidth: '1200px',
+        margin: '0 auto'
+      }}
+      >
+        <section className={styles.publishers}>
+          <div className={styles.media}>
+            <section className={styles.newCampaignHeader}>
+              {/* <BackButton href={href} onBack={handleOnBack} /> */}
+            </section>
+            <div className={styles.filters}>
+              <Autocomplete
+                id='combo-box-demo'
+                options={initValues?.listOffPublishers || []}
+                fullWidth
+                label='Medios'
+                multiple
+                size='smaill'
+                groupBy={(option) => option.groupBy}
+                value={rows}
+                onChange={handleOnChangePublisher}
+              />
+            </div>
+            <Divider sx={{ width: '100%', marginBottom: '20px' }} />
+            <Typography fontSize='14px' align='center' sx={{ marginBottom: '24px' }}>Segmentación inicial para la campaña</Typography>
+            {!fields.length && <Typography fontSize='12px' align='center' sx={{ color: '#5b595f', margin: '30px 0' }}>Ningun medio seleccionado</Typography>}
+            <form className={styles.form}>
+              {fields.map((publisher, index) => (
+                <PublisherCard
+                  key={publisher.id}
+                  name={`publishers.${index}.share`}
+                  deleteRow={handleDeleteRow(index, publisher?.rowId)}
+                  onBlur={handleSetShare(index)}
+                  control={control}
+                  error={Boolean(errors?.publishers && errors?.publishers[index]?.share?.message)}
+                  helperText={errors?.publishers && errors?.publishers[index]?.share?.message}
+                  {...publisher}
+                />
+              ))}
+              <Divider sx={{ width: '100%', marginBottom: '20px' }} />
+              <div className={styles.buttonContainer}>
+                <Button size='large' disabled={disabledButton} variant='contained' onClick={handleSubmit(onSubmit)} loading={loading}>Guardar campaña</Button>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-      <div className={styles.summary}>
-        <SummaryCard
-          campaign={initValues}
-          {...cardInformation}
-        />
-      </div>
-      <div className={styles.buttonInvoice}>
-        <IconButton
-          onClick={() => setShowSummary(true)}
-          size='large' sx={{
-            position: 'fixed',
-            background: '#5b27ed',
-            bottom: '30px',
-            zIndex: 100,
-            right: '30px',
-            boxShadow: '0 4px 12px rgb(0 0 0 / 10%)',
-            '&:hover': {
-              background: '#5327d1'
-            }
-          }}
-        >
-          <ReceiptIcon fontSize='large' sx={{ color: 'white' }} />
-        </IconButton>
-      </div>
-      {/* <Modal
+          <div className={styles.summary}>
+            <SummaryCard
+              campaign={initValues}
+              {...cardInformation}
+            />
+          </div>
+          <div className={styles.buttonInvoice}>
+            <IconButton
+              onClick={() => setShowSummary(true)}
+              size='large' sx={{
+                position: 'fixed',
+                background: '#5b27ed',
+                bottom: '30px',
+                zIndex: 100,
+                right: '30px',
+                boxShadow: '0 4px 12px rgb(0 0 0 / 10%)',
+                '&:hover': {
+                  background: '#5327d1'
+                }
+              }}
+            >
+              <ReceiptIcon fontSize='large' sx={{ color: 'white' }} />
+            </IconButton>
+          </div>
+          {/* <Modal
         open={showSummary}
         onClose={() => setShowSummary(false)}
       >
@@ -198,7 +208,9 @@ const CampaignPublisherForm = ({ initValues, onBack, onSubmit, href, loading }) 
           />
         </div>
       </Modal> */}
-    </section>
+        </section>
+      </Box>
+    </>
   )
 }
 

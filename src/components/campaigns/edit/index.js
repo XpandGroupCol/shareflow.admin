@@ -66,7 +66,7 @@ const CampaignEditForm = ({ campaign, ages, sectors, targets, updateCampaign }) 
       return navigate(path)
     }
 
-    getPublushers(values.target?.value, values.amount).then(({ listOffPublishers, percentage }) => {
+    getPublushers(values.target?.value, values.amount).then(({ listOffPublishers }) => {
       let { rows, publishers } = campaignState
       let clearPublishers = false
 
@@ -85,8 +85,7 @@ const CampaignEditForm = ({ campaign, ages, sectors, targets, updateCampaign }) 
           logo,
           listOffPublishers,
           rows: clearPublishers ? [] : prev.row ?? rows,
-          publishers: clearPublishers ? [] : prev.publishers ?? [],
-          userPercentage: percentage
+          publishers: clearPublishers ? [] : prev.publishers ?? []
         }))
         return navigate(path)
       }

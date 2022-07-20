@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom'
 import { TAG_COLOR } from 'configs/campaigns'
 
 const ItemRow = ({ item, onDelete }) => {
-  const { brand, name, amount, logo, status, ages, sex, _id } = item
+  const { brand, name, amount, logo, status, ages, sex, _id, user, userPercentage = 0 } = item
   const localState = TAG_COLOR[status] || {}
   return (
     <TableRow>
@@ -21,6 +21,15 @@ const ItemRow = ({ item, onDelete }) => {
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography fontWeight='bold' fontSize='0.875rem' color='#4b494f'>{name}</Typography>
             <Typography fontSize='12px' color='#4b494f'>{brand}</Typography>
+          </Box>
+        </Box>
+      </TableCell>
+      <TableCell>
+        <Box sx={{ display: 'flex', gap: '10px' }}>
+          <Avatar src={user?.avatar?.url || ''} label={user?.name} />
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography fontWeight='bold' fontSize='0.875rem' color='#4b494f'>{user?.name}</Typography>
+            <Typography fontSize='12px' color='#4b494f'>%{userPercentage}</Typography>
           </Box>
         </Box>
       </TableCell>

@@ -3,6 +3,9 @@ export const columns = [
     name: 'Campaña'
   },
   {
+    name: 'Usuario'
+  },
+  {
     name: 'Precio',
     align: 'center'
   },

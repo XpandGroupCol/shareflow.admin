@@ -83,3 +83,15 @@ export const updateCampaign = async ({ id, payload }) => {
     return Promise.reject(e)
   }
 }
+
+export const validatorFile = async (payload) => {
+  try {
+    const { data } = await axiosFetcher('/campaigns/validateFiles', {
+      method: 'POST',
+      data: payload
+    })
+    return data
+  } catch (e) {
+    return Promise.reject(e)
+  }
+}
