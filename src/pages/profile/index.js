@@ -7,8 +7,7 @@ const Profile = () => {
   const { data = {}, isLoading, isError } = useGetProfile()
   if (isLoading) return <LoadingPage text='Buscando perfil ...' />
   if (isError) {
-    <Navigate to='/' />
-    return
+    return <Navigate to='/' />
   }
 
   return <ProfileForm user={data?.data} />

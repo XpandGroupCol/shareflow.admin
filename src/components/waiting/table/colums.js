@@ -1,14 +1,22 @@
 export const columns = [{
-  name: 'Nombres'
+  name: 'Nombres',
+  size: '20%'
 },
 {
-  name: 'Email'
+  name: 'Apellido',
+  size: '20%'
 },
 {
-  name: 'Whatsapp'
+  name: 'Email',
+  size: '25%'
+},
+{
+  name: 'Whatsapp',
+  size: '20%'
 },
 {
   name: 'Enviar invitación',
-  align: 'center'
+  align: 'center',
+  size: '15%'
 }
 ]
