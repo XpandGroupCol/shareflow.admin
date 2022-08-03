@@ -61,9 +61,31 @@ export const getCSVUsers = async (params) => {
   }
 }
 
-export const uploadUserfile = async (payload) => {
+export const uploadAvater = async ({ id, payload }) => {
   try {
-    const { data } = await axiosFetcher('/users/upload-file',
+    const { data } = await axiosFetcher(`/users/upload-avatar/${id}`,
+      { method: 'PUT', data: payload }
+    )
+    return data
+  } catch (err) {
+    return Promise.reject(err)
+  }
+}
+
+export const uploadRut = async ({ id, payload }) => {
+  try {
+    const { data } = await axiosFetcher(`/users/upload-rut/${id}`,
+      { method: 'PUT', data: payload }
+    )
+    return data
+  } catch (err) {
+    return Promise.reject(err)
+  }
+}
+
+export const validateRut = async ({ id, payload }) => {
+  try {
+    const { data } = await axiosFetcher(`/users/validate-rut/${id}`,
       { method: 'PUT', data: payload }
     )
     return data

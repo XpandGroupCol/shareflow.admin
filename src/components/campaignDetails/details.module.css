@@ -1,0 +1,17 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media screen and (max-width:600px) {
+    .header {
+        flex-direction: column;
+        gap: 30px;
+        align-items: flex-start;
+    }
+
+    .information{
+        order:2;
+    }
+}

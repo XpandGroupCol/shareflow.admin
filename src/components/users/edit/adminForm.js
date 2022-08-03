@@ -12,11 +12,12 @@ import Select from 'components/select'
 import { ROLES } from 'configs/lists'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { editUser, uploadUserfile } from 'services/users'
+import { editUser, uploadAvater } from 'services/users'
 import { useNotify } from 'hooks/useNotify'
 import ChangeAvatar from 'components/changeAvatar'
 import { useMutation, useQueryClient } from 'react-query'
 import { USERS } from 'configs/queryKeys'
+import { GLOBAL_ERROR } from 'configs'
 
 const EditAdminForm = ({ user }) => {
   const { formState: { errors }, handleSubmit, control } = useForm({
@@ -31,7 +32,7 @@ const EditAdminForm = ({ user }) => {
 
   const { isLoading, mutateAsync } = useMutation(editUser)
 
-  const { isLoading: updatedIsLoading, mutateAsync: changeAvatar } = useMutation(uploadUserfile)
+  const { isLoading: updatedIsLoading, mutateAsync: changeAvatar } = useMutation(uploadAvater)
   const queryClient = useQueryClient()
   const onSubmit = async ({ email, name, lastName, password, role, _id }) => {
     const payload = { email, name, lastName, password, role, avatar }
@@ -42,7 +43,7 @@ const EditAdminForm = ({ user }) => {
       notify.success('El usuario se ha modificado exitosamente')
       navigation('/users')
     } catch (e) {
-      notify.error('ups, algo salio mal por favor intente nuevamente')
+      notify.error(GLOBAL_ERROR)
     }
   }
 
@@ -50,18 +51,25 @@ const EditAdminForm = ({ user }) => {
     try {
       const payload = new window.FormData()
       payload.append('file', file)
-      const { data } = await changeAvatar(payload)
-      if (!data) return notify.error('ups, algo salio mal por favor intente nuevamente')
+      const { data } = await changeAvatar({ payload, id: user?._id })
+      if (!data) return notify.error(GLOBAL_ERROR)
       setAvatar(data)
       notify.success('La imagen se ha cambiado correctamente')
     } catch (e) {
-      notify.error('ups, algo salio mal por favor intente nuevamente')
+      notify.error(GLOBAL_ERROR)
     }
   }
 
-  const onDelete = () => {
-    // aqui se debe llamar al back
-    setAvatar({ url: '', name: '' })
+  const onDelete = async () => {
+    try {
+      const payload = { name: user?.avatar?.name || '' }
+      const { data } = await changeAvatar({ payload, id: user?._id })
+      if (!data) return notify.error(GLOBAL_ERROR)
+      setAvatar({ url: '', name: '' })
+      notify.success('La imagen se ha cambiado correctamente')
+    } catch (e) {
+      notify.error(GLOBAL_ERROR)
+    }
   }
 
   return (

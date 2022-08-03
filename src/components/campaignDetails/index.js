@@ -6,11 +6,16 @@ import OrderTable from 'components/orderTable'
 import StatusTag from 'components/statusTag'
 import Typography from 'components/typography'
 import { TAG_COLOR } from 'configs/campaigns'
-import { Link } from 'react-router-dom'
-import { parseDate } from 'utils/normalizeData'
+import { getFormatedNumber, parseDate } from 'utils/normalizeData'
+import styles from './details.module.css'
+import { useDownloadPDF } from 'hooks/useDownloadPDF'
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
 
 const CampaignDetails = ({ campaing }) => {
   const localState = TAG_COLOR[campaing?.status] || {}
+
+  const { getPDF } = useDownloadPDF()
+
   return (
     <>
       <section className='headerSection'>
@@ -26,50 +31,63 @@ const CampaignDetails = ({ campaing }) => {
         borderRadius: '8px'
       }}
       >
+        <section className={styles.header}>
+          <div className={styles.information}>
+            <Box sx={{ display: 'flex', gap: '10px' }}>
+              <Typography fontSize='16px' fontWeight='bold'>Número de orden:</Typography>
+              <Typography>{campaing?.orderNumber?.toString()?.padStart(7, '0') || ''}</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: '10px' }}>
+              <Typography fontSize='16px' fontWeight='bold'>Campaña:</Typography>
+              <Typography>{campaing?.name}</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+              <Typography fontSize='16px' fontWeight='bold'>Marca:</Typography>
+              <Typography>{campaing?.brand}</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: '10px' }}>
+              <Typography fontSize='16px' fontWeight='bold'>Fechas:</Typography>
+              <Typography>{parseDate(campaing?.startDate)} - {parseDate(campaing?.endDate)}</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+              <Typography fontSize='16px' fontWeight='bold'>Estado:</Typography>
+              {localState?.label ? <StatusTag label={localState?.label} color={localState?.color} /> : ''}
+            </Box>
+            <Box sx={{ display: 'flex', gap: '10px' }}>
+              <Typography fontSize='16px' fontWeight='bold'>Impresiones:</Typography>
+              <Typography>{getFormatedNumber(campaing?.summary?.prints)}</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: '10px' }}>
+              <Typography fontSize='16px' fontWeight='bold'>Reproducciones:</Typography>
+              <Typography>{campaing?.summary?.reproductions}</Typography>
 
-        <Box sx={{ display: 'flex', gap: '10px' }}>
-          <Typography fontSize='16px' fontWeight='bold'>Campaña:</Typography>
-          <Typography>{campaing?.name}</Typography>
-        </Box>
-        <Box sx={{ display: 'flex', gap: '10px' }}>
-          <Typography fontSize='16px' fontWeight='bold'>Marca:</Typography>
-          <Typography>{campaing?.brand}</Typography>
-        </Box>
-        <Box sx={{ display: 'flex', gap: '10px' }}>
-          <Typography fontSize='16px' fontWeight='bold'>Fechas</Typography>
-          <Typography>{parseDate(campaing?.startDate)} - {parseDate(campaing?.endDate)}</Typography>
-        </Box>
-        <Box sx={{ display: 'flex', gap: '10px' }}>
-          <Typography fontSize='16px' fontWeight='bold'>Estado:</Typography>
-          {localState?.label ? <StatusTag label={localState?.label} color={localState?.color} /> : ''}
-        </Box>
-        <Box>
-          <Avatar sx={{ width: 80, height: 80 }} src={campaing?.logo?.url || ''} label={campaing?.brand} />
-        </Box>
+            </Box>
+            <Box sx={{ display: 'flex', gap: '10px' }}>
+              <Typography fontSize='16px' fontWeight='bold'>Clicks:</Typography>
+              <Typography>{campaing?.summary?.clicks}</Typography>
+
+            </Box>
+          </div>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <Avatar sx={{ width: 100, height: 100 }} src={campaing?.logo?.url || ''} label={campaing?.brand} />
+            <Button size='small' variant='contained' color='secondary' onClick={() => getPDF(campaing)}>
+              <PictureAsPdfIcon sx={{ marginRight: '10px' }} />
+              Descargar Orden
+            </Button>
+          </Box>
+        </section>
         <Divider sx={{ margin: '20px 0' }} />
         <Typography sx={{ fontWeight: 'bold', fontSize: '20px' }}>Segmentación de la campaña</Typography>
         <OrderTable
           data={campaing?.publishers || []}
-          target={campaing?.target?.name}
+          target={campaing?.target?.label}
           summary={campaing?.summary || {}}
         />
         <Box sx={{ margin: '30px 0' }}>
           <Typography sx={{ fontWeight: 'bold', fontSize: '20px' }}>Multimedia</Typography>
           <OrderMedia data={campaing?.publishers || []} />
         </Box>
-        {campaing?.status === 'paid' && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-            <Link to='/campaigns'>
-              <Button component='span' variant='outlined'>
-                Salir
-              </Button>
-            </Link>
-            <Link to={`/campaigns/${campaing?._id}/edit`}>
-              <Button component='span' variant='contained'>
-                Editar Campaña
-              </Button>
-            </Link>
-          </Box>)}
+
       </Box>
     </>
   )

@@ -22,11 +22,12 @@ import PublishersPage from 'pages/publishers'
 import CreatePublisherPage from 'pages/create-publishers'
 import EditUserPage from 'pages/edit-user'
 import EditPublisherPage from 'pages/edit-publisher'
-import CampaignViewPage from 'pages/campaign-view'
-import CampaignEditPage from 'pages/campaing-edit'
-import CampaignUpdatePage from 'pages/campaign-update'
-import CampaignMediaPage from 'pages/campaing-media'
-import CampaignPublisherPage from 'pages/campaign-publishers'
+
+import EditPage from 'pages/campaign-edit'
+import CampaignEditFormPage from 'pages/campaign-edit/form'
+import PublishersEditPage from 'pages/campaign-edit/publishers'
+import EditMediaPage from 'pages/campaign-edit/media'
+import CampaignOrderPage from 'pages/campaign-view'
 
 const Router = () => (
   <BrowserRouter>
@@ -180,24 +181,18 @@ const Router = () => (
         }
       />
       <Route
-        path='campaigns/view/:id'
-        element={
-          <PrivateRoute>
-            <CampaignViewPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
         path='campaigns/:id'
         element={
           <PrivateRoute>
-            <CampaignEditPage />
+            <EditPage />
           </PrivateRoute>
         }
       >
-        <Route index path='edit' element={<CampaignUpdatePage />} />
-        <Route path='publishers' element={<CampaignPublisherPage />} />
-        <Route path='media' element={<CampaignMediaPage />} />
+        <Route index path='edit' element={<CampaignEditFormPage />} />
+        <Route path='publishers' element={<PublishersEditPage />} />
+        <Route path='media' element={<EditMediaPage />} />
+        <Route path='view' element={<CampaignOrderPage />} />
+
       </Route>
       <Route
         path='profile'

@@ -3,11 +3,11 @@ import { useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import styles from './drop.module.css'
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
-import { IconButton } from '@mui/material'
+import { CircularProgress, IconButton } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 
-const UploadFile = ({ onChange }) => {
+const UploadFile = ({ onChange, loading }) => {
   const [files, setFiles] = useState([])
   const {
     getRootProps, getInputProps, isFocused,
@@ -51,16 +51,21 @@ const UploadFile = ({ onChange }) => {
         : files.map((file) => (
           <div key={file.path} className={styles.file}>
             <div className={styles.text}>
-              <PictureAsPdfIcon />
+              <PictureAsPdfIcon fontSize='large' />
               {file.path}
             </div>
             <div className={styles.buttons}>
-              <IconButton onClick={onUpload}>
-                <CheckIcon />
-              </IconButton>
-              <IconButton onClick={onDelete}>
-                <CloseIcon />
-              </IconButton>
+              {loading
+                ? <CircularProgress size={20} color='success' />
+                : (
+                  <>
+                    <IconButton onClick={onUpload}>
+                      <CheckIcon fontSize='small' />
+                    </IconButton>
+                    <IconButton onClick={onDelete}>
+                      <CloseIcon fontSize='small' />
+                    </IconButton>
+                  </>)}
             </div>
           </div>
         ))}

@@ -1,6 +1,6 @@
 import { useGetCampaignById } from 'hooks/useGetCampaignById'
-import { useGetLists } from 'hooks/useGetLists'
-import { createContext, useContext, useEffect, useState } from 'react'
+
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { normalizeCampaign } from 'utils/normalizeData'
 
@@ -9,7 +9,6 @@ const CampaignContext = createContext()
 const CampaignProvider = ({ children }) => {
   const { id } = useParams()
   const { data, isLoading, isError } = useGetCampaignById(id)
-  const { data: lists, isLoading: loading } = useGetLists()
 
   const [globalCampaign, setGlobalCampaign] = useState(null)
 
@@ -19,14 +18,18 @@ const CampaignProvider = ({ children }) => {
     }
   }, [data?.data])
 
+  const setLogo = useCallback((logo) => {
+    setGlobalCampaign(prev => ({ ...prev, logo }))
+  }, [])
+
   return (
     <CampaignContext.Provider value={{
       id,
       globalCampaign,
-      setGlobalCampaign,
-      loading: isLoading || loading || !globalCampaign?._id,
+      updateCampaign: setGlobalCampaign,
+      loading: isError ? false : isLoading || !globalCampaign?._id,
       error: isError,
-      lists
+      setLogo
     }}
     >
       {children}
@@ -34,6 +37,6 @@ const CampaignProvider = ({ children }) => {
   )
 }
 
-export const useGlobalCampaigns = () => useContext(CampaignContext)
+export const useEditGlobalCampaigns = () => useContext(CampaignContext)
 
 export default CampaignProvider

@@ -61,9 +61,9 @@ export const getCSVPublishers = async (params) => {
   }
 }
 
-export const uploadPublisherfile = async (payload) => {
+export const uploadPublisherfile = async ({ id, payload }) => {
   try {
-    const { data } = await axiosFetcher('/publishers/upload-file',
+    const { data } = await axiosFetcher(`/publishers/upload-logo/${id}`,
       { method: 'PUT', data: payload }
     )
     return data

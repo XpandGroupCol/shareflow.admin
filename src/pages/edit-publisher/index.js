@@ -1,7 +1,8 @@
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { useGetPublisherById } from 'hooks/useGetPublisherById'
 import { useGetLists } from 'hooks/useGetLists'
 import EditPublisher from 'components/publishers/edit'
+import LoadingPage from 'components/loadingPage'
 
 const EditPublisherPage = () => {
   const { id } = useParams()
@@ -9,9 +10,9 @@ const EditPublisherPage = () => {
   const { data: lists = {}, isLoading: listLoading } = useGetLists()
   const { ages = [], formats = [], targets = [] } = lists
 
-  if (isLoading || listLoading) return <h1>cargando...</h1>
+  if (isLoading || listLoading) return <LoadingPage text='Buscando publisher ...' />
 
-  if (isError || !data) return <h1>error</h1>
+  if (isError || !data) return <Navigate to='/publishers' />
 
   const { data: publisher } = data
 

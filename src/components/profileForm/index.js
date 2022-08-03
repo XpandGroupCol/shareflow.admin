@@ -15,11 +15,14 @@ import { updateProfile } from 'services/profile'
 import { useNotify } from 'hooks/useNotify'
 
 import ChangeAvatar from 'components/changeAvatar'
-import { uploadUserfile } from 'services/users'
+import { uploadAvater } from 'services/users'
+import { GLOBAL_ERROR } from 'configs'
+import { useSession } from 'providers/SessionProvider'
 
 const ProfileForm = ({ user }) => {
   const notify = useNotify()
   const [openModal, setOpenModal] = useState(false)
+  const { setUSerSession } = useSession()
 
   const { formState: { errors }, handleSubmit, control } = useForm({
     defaultValues: user?._id ? clearInitInformation(user) : { ...defaultValues },
@@ -29,15 +32,16 @@ const ProfileForm = ({ user }) => {
   const [avatar, setAvatar] = useState(user?.avatar || { url: '', name: '' })
 
   const { isLoading: submitLoading, mutateAsync } = useMutation(updateProfile)
-  const { isLoading: updatedIsLoading, mutateAsync: changeAvatar } = useMutation(uploadUserfile)
+  const { isLoading: updatedIsLoading, mutateAsync: changeAvatar } = useMutation(uploadAvater)
 
   const onSubmit = (values) => {
     mutateAsync({ ...values, avatar })
       .then(({ data }) => {
+        setUSerSession(data)
         notify.success('El usuario se ha cambiado correctamente')
       })
       .catch(() => {
-        notify.error('Ups, algo salio man')
+        notify.error(GLOBAL_ERROR)
       })
   }
 
@@ -47,18 +51,27 @@ const ProfileForm = ({ user }) => {
     try {
       const payload = new window.FormData()
       payload.append('file', file)
-      const { data } = await changeAvatar(payload)
-      if (!data) return notify.error('ups, algo salio mal por favor intente nuevamente')
+      const { data } = await changeAvatar({ payload, id: user?._id })
+      setUSerSession({ ...user, avatar: data })
+      if (!data) return notify.error(GLOBAL_ERROR)
       setAvatar(data)
       notify.success('La imagen se ha cambiado correctamente')
     } catch (e) {
-      notify.error('ups, algo salio mal por favor intente nuevamente')
+      notify.error(GLOBAL_ERROR)
     }
   }
 
-  const onDelete = () => {
-    // aqui se debe llamar al back
-    setAvatar({ url: '', name: '' })
+  const onDelete = async () => {
+    try {
+      const payload = { name: user?.avatar?.name || '' }
+      const { data } = await changeAvatar({ payload, id: user?._id })
+      setUSerSession({ ...user, avatar: data })
+      if (!data) return notify.error(GLOBAL_ERROR)
+      setAvatar({ url: '', name: '' })
+      notify.success('La imagen se ha cambiado correctamente')
+    } catch (e) {
+      notify.error(GLOBAL_ERROR)
+    }
   }
 
   return (

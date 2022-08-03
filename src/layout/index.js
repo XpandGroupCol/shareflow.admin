@@ -10,16 +10,17 @@ import Toolbar from '@mui/material/Toolbar'
 
 import { LogoIcon } from 'assets/icons'
 import DrawerItems from './drawerItems'
+import styles from './auth.module.css'
 import { useState } from 'react'
-import { Divider, Menu, MenuItem } from '@mui/material'
+import { useSession } from 'providers/SessionProvider'
 import Typography from 'components/typography'
 import Avatar from 'components/avatar'
+import { Divider, Menu, MenuItem } from '@mui/material'
 import { Link } from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person'
-import LogoutIcon from '@mui/icons-material/Logout'
-import styles from './auth.module.css'
-import { useSession } from 'providers/SessionProvider'
 import { logout } from 'services/auth'
+import LogoutIcon from '@mui/icons-material/Logout'
+
 const drawerWidth = 250
 
 export default function Layout ({ children }) {
@@ -41,18 +42,21 @@ export default function Layout ({ children }) {
 
   const open = Boolean(anchorEl)
 
+  console.log({ user })
+
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: ' rgb(247, 249, 252)' }}>
       <AppBar
         position='fixed'
         elevation={0}
         sx={{
           width: { md: `calc(100% - ${drawerWidth}px)` },
           ml: { md: `${drawerWidth}px` },
-          boxShadow: 'rgb(34 51 84 / 10%) 0px 2px 4px -3px, rgb(34 51 84 / 5%) 0px 5px 12px -4px'
+          boxShadow: 'rgb(34 51 84 / 10%) 0px 2px 4px -3px, rgb(34 51 84 / 5%) 0px 5px 12px -4px',
+          background: 'white'
         }}
       >
-        <Toolbar sx={{ height: '64px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Toolbar sx={{ height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton
               color='primary'
@@ -81,7 +85,7 @@ export default function Layout ({ children }) {
               </Typography>
               <Typography color='gray' sx={{ fontSize: 12, textAlign: 'right' }}>{user?.role}</Typography>
             </div>
-            <Avatar src={user?.image} label={user?.name} sx={{ width: 36, height: 36 }} />
+            <Avatar src={user?.avatar?.url} label={user?.name} sx={{ width: 36, height: 36 }} />
 
           </button>
           <Menu
@@ -117,7 +121,7 @@ export default function Layout ({ children }) {
             </MenuItem>
             <Divider />
             <Link to='/profile'>
-              <MenuItem component='a' onClick={handleClose}>
+              <MenuItem component='span' onClick={handleClose}>
                 <PersonIcon fontSize='small' sx={{ marginRight: '10px' }} />
                 Perfil
               </MenuItem>

@@ -1,12 +1,13 @@
-import CampaignProvider from 'providers/CampaingProvider'
+import CampaignProvider from 'providers/EditCampaingProvider'
 import { Outlet } from 'react-router-dom'
 
-const CampaignEditPage = () => {
+const EditPage = () => {
   return (
     <CampaignProvider>
       <Outlet />
     </CampaignProvider>
+
   )
 }
 
-export default CampaignEditPage
+export default EditPage

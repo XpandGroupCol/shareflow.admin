@@ -47,7 +47,7 @@ const ItemRow = ({ item, onDelete }) => {
       </TableCell>
       <TableCell>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-          <Link to={`/campaigns/view/${_id}`}>
+          <Link to={`/campaigns/${_id}/view`}>
             <IconButton size='small' component='span'>
               <VisibilityIcon fontSize='small' />
             </IconButton>

@@ -1,20 +1,31 @@
+
+import { GLOBAL_ERROR } from 'configs'
 import { useNotify } from 'hooks/useNotify'
 import { useCallback, useState } from 'react'
+
 import { getPublishersByTarget } from 'services/campaigns'
 
-const useGetPublishersByTarget = () => {
+const setPayload = ({ ages, sex, amount, target }) => ({
+  target: target?.value,
+  ages: ages.map(({ value }) => value).join(','),
+  amount,
+  sex
+}
+)
+export const useGetPublishersByTarget = () => {
   const [loading, setLoading] = useState(false)
   const notify = useNotify()
 
-  const getPublushers = useCallback(async (target, miniBudget) => {
+  const getPublushers = useCallback(async (payload) => {
     try {
       setLoading(true)
-      const { data: listOffPublishers, user } = await getPublishersByTarget(target, miniBudget)
+      const filters = setPayload(payload)
+      const { data: listOffPublishers, user } = await getPublishersByTarget(filters)
       setLoading(false)
       return Promise.resolve({ listOffPublishers, percentage: user?.percentage || 15 })
     } catch (e) {
       setLoading(false)
-      notify.error('Algo salio mal, por favor intenta nuevamente')
+      notify.error(GLOBAL_ERROR)
     }
   }, [notify])
 
@@ -23,5 +34,3 @@ const useGetPublishersByTarget = () => {
     getPublushers
   }
 }
-
-export default useGetPublishersByTarget

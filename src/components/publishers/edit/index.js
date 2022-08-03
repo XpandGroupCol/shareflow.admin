@@ -22,6 +22,7 @@ import { useNotify } from 'hooks/useNotify'
 import { editPublisher, uploadPublisherfile } from 'services/publishers'
 import { normalizeFormats } from 'utils/publishersFormat'
 import ChangeAvatar from 'components/changeAvatar'
+import { GLOBAL_ERROR } from 'configs'
 
 const EditPublisher = ({ publisher, ages, formats, targets }) => {
   const { formState: { errors }, handleSubmit, control } = useForm({
@@ -78,7 +79,7 @@ const EditPublisher = ({ publisher, ages, formats, targets }) => {
       notify.success('El publisher se ha editado exitosamente.')
       navigation('/publishers')
     } catch (e) {
-      notify.success('ups, algo salio mal por favor intente nuevamente')
+      notify.success(GLOBAL_ERROR)
     }
   }
 
@@ -86,18 +87,25 @@ const EditPublisher = ({ publisher, ages, formats, targets }) => {
     try {
       const payload = new window.FormData()
       payload.append('file', file)
-      const { data } = await changeLogo(payload)
-      if (!data) return notify.error('ups, algo salio mal por favor intente nuevamente')
+      const { data } = await changeLogo({ payload, id: publisher?._id })
+      if (!data) return notify.error(GLOBAL_ERROR)
       setLogo(data)
       notify.success('La imagen se ha cambiado correctamente')
     } catch (e) {
-      notify.error('ups, algo salio mal por favor intente nuevamente')
+      notify.error(GLOBAL_ERROR)
     }
   }
 
-  const onDelete = () => {
-    // aqui se debe llamar al back
-    setLogo({ url: '', name: '' })
+  const onDelete = async () => {
+    try {
+      const payload = { name: publisher?.rut?.name || '' }
+      const { data } = await changeLogo({ payload, id: publisher?._id })
+      if (!data) return notify.error(GLOBAL_ERROR)
+      setLogo({ url: '', name: '' })
+      notify.success('El rut se ha eliminado correctamente')
+    } catch (e) {
+      notify.error(GLOBAL_ERROR)
+    }
   }
 
   return (

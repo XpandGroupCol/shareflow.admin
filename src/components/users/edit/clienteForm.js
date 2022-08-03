@@ -10,7 +10,7 @@ import Button from 'components/button'
 import styles from './form.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { editUser, uploadUserfile } from 'services/users'
+import { editUser, uploadAvater, uploadRut, validateRut } from 'services/users'
 import { useNotify } from 'hooks/useNotify'
 import ChangeAvatar from 'components/changeAvatar'
 import PhoneInput from 'components/phoneInput'
@@ -18,7 +18,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import { USERS } from 'configs/queryKeys'
 import UploadFile from 'components/uploadFile'
 import UpdateFile from 'components/updateFile'
-import Checkbox from 'components/checkbox'
+import { GLOBAL_ERROR } from 'configs'
 
 const EditClientForm = ({ user }) => {
   const { formState: { errors }, handleSubmit, control, setError, clearErrors } = useForm({
@@ -35,12 +35,15 @@ const EditClientForm = ({ user }) => {
 
   const [rut, setRut] = useState(user?.rut || { url: '', name: '' })
 
+  const [checkRut, setCheckRut] = useState(user?.checkRut || false)
+
   const { isLoading, mutateAsync } = useMutation(editUser)
 
-  const { isLoading: updatedIsLoading, mutateAsync: changeAvatar } = useMutation(uploadUserfile)
+  const { isLoading: updatedIsLoading, mutateAsync: changeAvatar } = useMutation(uploadAvater)
 
-  const { isLoading: uploadRutLoading, mutateAsync: changeRut } = useMutation(uploadUserfile)
+  const { isLoading: uploadRutLoading, mutateAsync: changeRut } = useMutation(uploadRut)
 
+  const { isLoading: uploadValidateRut, mutateAsync: validateCheckRut } = useMutation(validateRut)
   const onSubmit = async ({
     email,
     name,
@@ -52,7 +55,6 @@ const EditClientForm = ({ user }) => {
     address,
     companyEmail,
     percentage,
-    checkRut,
     _id
   }) => {
     const payload = {
@@ -67,7 +69,6 @@ const EditClientForm = ({ user }) => {
       companyEmail,
       rut,
       percentage,
-      checkRut,
       avatar
     }
     try {
@@ -76,7 +77,7 @@ const EditClientForm = ({ user }) => {
       notify.success('El usuario se ha modificado exitosamente')
       navigation('/users')
     } catch (e) {
-      notify.error('ups, algo salio mal por favor intente nuevamente')
+      notify.error(GLOBAL_ERROR)
     }
   }
 
@@ -84,42 +85,67 @@ const EditClientForm = ({ user }) => {
     try {
       const payload = new window.FormData()
       payload.append('file', file)
-      const { data } = await changeAvatar(payload)
-      if (!data) return notify.error('ups, algo salio mal por favor intente nuevamente')
+      const { data } = await changeAvatar({ payload, id: user?._id })
+      if (!data) return notify.error(GLOBAL_ERROR)
       setAvatar(data)
       notify.success('La imagen se ha cambiado correctamente')
     } catch (e) {
-      notify.error('ups, algo salio mal por favor intente nuevamente')
+      notify.error(GLOBAL_ERROR)
     }
   }
 
-  const onDelete = () => {
-    // aqui se debe llamar al back
-    setAvatar({ url: '', name: '' })
+  const onDelete = async () => {
+    try {
+      const payload = { name: user?.avatar?.name || '' }
+      const { data } = await changeAvatar({ payload, id: user?._id })
+      if (!data) return notify.error(GLOBAL_ERROR)
+      setAvatar({ url: '', name: '' })
+      notify.success('La imagen se ha cambiado correctamente')
+    } catch (e) {
+      notify.error(GLOBAL_ERROR)
+    }
   }
 
   const handleOnUploadRut = async (file) => {
     try {
       const payload = new window.FormData()
       payload.append('file', file)
-      const { data } = await changeRut(payload)
-      if (!data) return notify.error('ups, algo salio mal por favor intente nuevamente')
+      const { data } = await changeRut({ payload, id: user?._id })
+      if (!data) return notify.error(GLOBAL_ERROR)
       setRut(data)
-      notify.success('La imagen se ha cambiado correctamente')
+      notify.success('El rut se se ha guardado correctamente')
     } catch (e) {
-      notify.error('ups, algo salio mal por favor intente nuevamente')
+      notify.error(GLOBAL_ERROR)
     }
   }
 
-  const onDeleteRut = () => {
-    // aqui se debe llamar al back
-    setRut({ url: '', name: '' })
+  const onDeleteRut = async () => {
+    try {
+      const payload = { name: user?.rut?.name || '' }
+      const { data } = await changeRut({ payload, id: user?._id })
+      if (!data) return notify.error(GLOBAL_ERROR)
+      setRut({ url: '', name: '' })
+      notify.success('El rut se ha eliminado correctamente')
+    } catch (e) {
+      notify.error(GLOBAL_ERROR)
+    }
+  }
+
+  const onValidateRut = async () => {
+    try {
+      const payload = { checkRut: true }
+      await validateCheckRut({ payload, id: user?._id })
+      setCheckRut(true)
+      notify.success('El Rut ha sido validado con exito, Se le ha enviado un email al usuario para que pueda continuar con el flujo')
+    } catch (e) {
+      notify.error(GLOBAL_ERROR)
+    }
   }
 
   return (
     <>
       <section className='headerSection'>
-        <Typography fontSize='24px' component='h2' fontWeight='bold'>Nuevo Usuario</Typography>
+        <Typography fontSize='24px' component='h2' fontWeight='bold'>Editar Usuario</Typography>
       </section>
 
       <Box sx={{
@@ -249,12 +275,14 @@ const EditClientForm = ({ user }) => {
               ? (
                 <div className={styles.rutValidation}>
                   <UpdateFile file={rut} onDelete={onDeleteRut} />
-                  <ControllerField
-                    name='checkRut'
-                    label='Validar rut'
-                    control={control}
-                    element={Checkbox}
-                  />
+                  {!checkRut && (
+                    <>
+                      <Button loading={uploadValidateRut} size='small' onClick={onValidateRut} color='success' variant='contained' sx={{ maxWidth: 140, color: 'white' }}>
+                        Validar el rut
+                      </Button>
+                      <Divider sx={{ marginTop: '20px' }} />
+                    </>
+                  )}
                 </div>)
               : <UploadFile onChange={handleOnUploadRut} />
           }
@@ -265,7 +293,13 @@ const EditClientForm = ({ user }) => {
                 Cancelar
               </Button>
             </Link>
-            <Button disabled={updatedIsLoading || !!Object.keys(errors).length || uploadRutLoading} loading={isLoading} sx={{ minWidth: '200px' }} variant='contained' type='submit'>
+            <Button
+              disabled={updatedIsLoading || !!Object.keys(errors).length || uploadRutLoading || uploadValidateRut}
+              loading={isLoading}
+              sx={{ minWidth: '200px' }}
+              variant='contained'
+              type='submit'
+            >
               Guardar
             </Button>
           </Box>

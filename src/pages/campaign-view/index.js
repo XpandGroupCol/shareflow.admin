@@ -1,21 +1,20 @@
 import CampaignDetails from 'components/campaignDetails'
 import LoadingPage from 'components/loadingPage'
-import { useGetCampaignById } from 'hooks/useGetCampaignById'
-import { Navigate, useParams } from 'react-router-dom'
+import { useEditGlobalCampaigns } from 'providers/EditCampaingProvider'
 
-const CampaignViewPage = () => {
-  const { id } = useParams()
-  const { data, isLoading, isError } = useGetCampaignById(id)
+import { Navigate } from 'react-router-dom'
 
-  if (isLoading) return <LoadingPage text='Buscando campaña ...' />
-  if (isError) {
-    <Navigate to='/campaigns' />
-    return
-  }
+const CampaignOrderPage = () => {
+  const { globalCampaign, loading, error } = useEditGlobalCampaigns()
+
+  if (loading) return <LoadingPage text='Buscando orden ...' />
+  if (error) return <Navigate to='/campaigns' />
 
   return (
-    <CampaignDetails campaing={data?.data} />
+    <CampaignDetails
+      campaing={globalCampaign}
+    />
   )
 }
 
-export default CampaignViewPage
+export default CampaignOrderPage
