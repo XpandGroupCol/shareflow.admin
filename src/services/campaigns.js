@@ -95,9 +95,9 @@ export const validatorFile = async (payload) => {
   }
 }
 
-export const downloadPDF = async ({ id, name }) => {
+export const downloadPDF = async ({ _id, name }) => {
   try {
-    const { data } = await axiosFetcher(`/campaigns/pdf/${id}`,
+    const { data } = await axiosFetcher(`/campaigns/pdf/${_id}`,
       { method: 'GET', responseType: 'blob' }
     )
     const url = window.URL.createObjectURL(new Blob([data]))

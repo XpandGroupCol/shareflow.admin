@@ -42,8 +42,6 @@ export default function Layout ({ children }) {
 
   const open = Boolean(anchorEl)
 
-  console.log({ user })
-
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: ' rgb(247, 249, 252)' }}>
       <AppBar

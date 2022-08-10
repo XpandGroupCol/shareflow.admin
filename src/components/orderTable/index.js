@@ -32,7 +32,7 @@ const OrderTable = ({
               <TableCell align='right'>${getFormatedNumber(pricePerUnit)}</TableCell>
               <TableCell align='right'>{getFormatedNumber(objectiveGoal)}</TableCell>
               <TableCell align='center'>{biddingModel}</TableCell>
-              <TableCell align='right'>{getFormatedNumber(value)}</TableCell>
+              <TableCell align='right'>${getFormatedNumber(value)}</TableCell>
             </TableRow>
           ))}
 

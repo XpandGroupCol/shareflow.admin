@@ -52,8 +52,9 @@ const ProfileForm = ({ user }) => {
       const payload = new window.FormData()
       payload.append('file', file)
       const { data } = await changeAvatar({ payload, id: user?._id })
-      setUSerSession({ ...user, avatar: data })
+
       if (!data) return notify.error(GLOBAL_ERROR)
+      setUSerSession({ ...user, avatar: data })
       setAvatar(data)
       notify.success('La imagen se ha cambiado correctamente')
     } catch (e) {
@@ -65,8 +66,9 @@ const ProfileForm = ({ user }) => {
     try {
       const payload = { name: user?.avatar?.name || '' }
       const { data } = await changeAvatar({ payload, id: user?._id })
-      setUSerSession({ ...user, avatar: data })
+
       if (!data) return notify.error(GLOBAL_ERROR)
+      setUSerSession({ ...user, avatar: data })
       setAvatar({ url: '', name: '' })
       notify.success('La imagen se ha cambiado correctamente')
     } catch (e) {
