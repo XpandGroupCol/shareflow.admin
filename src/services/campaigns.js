@@ -11,17 +11,6 @@ export const getCampaigns = async (params) => {
   }
 }
 
-export const deleteCampaign = async ({ id, payload }) => {
-  try {
-    const { data } = await axiosFetcher(`/campaigns/${id}`,
-      { method: 'DELETE', data: payload }
-    )
-    return data
-  } catch (err) {
-    return Promise.reject(err)
-  }
-}
-
 export const getCSVCampaign = async (params) => {
   try {
     const { data } = await axiosFetcher(`/campaigns/download${params}`,
@@ -109,5 +98,50 @@ export const downloadPDF = async ({ _id, name }) => {
     return data
   } catch (err) {
     return Promise.reject(err)
+  }
+}
+
+export const deleteCampaign = async (id) => {
+  try {
+    const { data } = await axiosFetcher(`/campaigns/${id}`, {
+      method: 'DELETE'
+    })
+    return data
+  } catch (e) {
+    return Promise.reject(e)
+  }
+}
+
+export const rememberEmail = async (id) => {
+  try {
+    const { data } = await axiosFetcher('/campaigns/remember', {
+      method: 'POST',
+      data: { id }
+    })
+    return data
+  } catch (e) {
+    return Promise.reject(e)
+  }
+}
+
+export const startCampaign = async (id) => {
+  try {
+    const { data } = await axiosFetcher(`/campaigns/start/${id}`, {
+      method: 'PUT'
+    })
+    return data
+  } catch (e) {
+    return Promise.reject(e)
+  }
+}
+
+export const finishCampaign = async (id) => {
+  try {
+    const { data } = await axiosFetcher(`/campaigns/end/${id}`, {
+      method: 'PUT'
+    })
+    return data
+  } catch (e) {
+    return Promise.reject(e)
   }
 }

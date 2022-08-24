@@ -10,6 +10,7 @@ import { getFormatedNumber, parseDate } from 'utils/normalizeData'
 import styles from './details.module.css'
 import { useDownloadPDF } from 'hooks/useDownloadPDF'
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
+import { Link } from 'react-router-dom'
 
 const CampaignDetails = ({ campaing }) => {
   const localState = TAG_COLOR[campaing?.status] || {}
@@ -86,6 +87,20 @@ const CampaignDetails = ({ campaing }) => {
         <Box sx={{ margin: '30px 0' }}>
           <Typography sx={{ fontWeight: 'bold', fontSize: '20px' }}>Multimedia</Typography>
           <OrderMedia data={campaing?.publishers || []} />
+          <Box>
+            <Link to='/campaigns'>
+              <Button component='span' variant='contained' color='secondary'>
+                Salir
+              </Button>
+            </Link>
+            {(campaing?.status === 'paid' || campaing?.status === 'inProgress') && (
+              <Link to={`/campaigns/${campaing?._id}/edit`}>
+                <Button component='span' variant='contained' color='primary'>
+                  Editar
+                </Button>
+              </Link>
+            )}
+          </Box>
         </Box>
 
       </Box>

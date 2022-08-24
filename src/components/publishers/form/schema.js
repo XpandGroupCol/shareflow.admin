@@ -6,7 +6,8 @@ export const defaultValues = {
   ageRange: [],
   sex: '',
   miniBudget: null,
-  category: ''
+  category: '',
+  locations: []
 }
 
 export const schema = yup.object({
@@ -15,6 +16,7 @@ export const schema = yup.object({
   sex: yup.string().required('Sexo es requerido.').nullable(),
   category: yup.string().required('Sexo es requerido.').nullable(),
   miniBudget: yup.string().required('Inversion minima es requerido.').nullable(),
+  locations: yup.array().min(1, 'Ubicaciones es requerido').required('Ubicaciones es requerido'),
   formats: yup.array().of(
     yup.object({
       format: yup.object().required('Formato es requerido.').nullable(),
@@ -23,5 +25,5 @@ export const schema = yup.object({
       device: yup.string().required('Dispositivo es requerido.'),
       pricePerUnit: yup.string().required('Precio por unidad es requerido.').nullable()
     })
-  ).min(1, 'Debes agregar minimo 1 formato')
+  )
 }).required()

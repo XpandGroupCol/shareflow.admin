@@ -1,8 +1,6 @@
-import { Box, IconButton, TableCell, TableRow } from '@mui/material'
+import { Box, IconButton, Menu, MenuItem, TableCell, TableRow } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
-import ToggleOffIcon from '@mui/icons-material/ToggleOff'
-import ToggleOnIcon from '@mui/icons-material/ToggleOn'
 import StatusTag from 'components/statusTag'
 import Avatar from 'components/avatar'
 import Typography from 'components/typography'
@@ -10,7 +8,21 @@ import { getSex, getAges, getFormatedNumber } from 'utils/normalizeData'
 import { Link } from 'react-router-dom'
 import { TAG_COLOR } from 'configs/campaigns'
 
-const ItemRow = ({ item, onDelete }) => {
+import { useState } from 'react'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import DeleteIcon from '@mui/icons-material/Delete'
+import Buttons from './buttons'
+
+const ItemRow = ({ item, onDelete, onRemember, onStart, onFinish }) => {
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
   const { brand, name, amount, logo, status, ages, sex, _id, user, userPercentage = 0 } = item
   const localState = TAG_COLOR[status] || {}
   return (
@@ -46,25 +58,65 @@ const ItemRow = ({ item, onDelete }) => {
         {localState?.label ? <StatusTag label={localState?.label} color={localState?.color} /> : ''}
       </TableCell>
       <TableCell>
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-          <Link to={`/campaigns/${_id}/view`}>
-            <IconButton size='small' component='span'>
-              <VisibilityIcon fontSize='small' />
-            </IconButton>
-          </Link>
-          <Link to={`/campaigns/${_id}/edit`}>
-            <IconButton size='small'>
-              <ModeEditIcon fontSize='small' />
-            </IconButton>
-          </Link>
-          <IconButton
-            size='small' onClick={onDelete(item)}
-            color={status ? 'success' : 'error'}
-          >
-            {status
-              ? <ToggleOffIcon fontSize='small' />
-              : <ToggleOnIcon fontSize='small' />}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+          <Buttons {...item} />
+          <IconButton size='small' component='span' onClick={handleClick}>
+            <MoreVertIcon />
           </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            sx={{
+              '& .MuiPaper-root': {
+                boxShadow: 'rgb(0 0 0 / 10%) 0px 4px 12px'
+              }
+            }}
+          >
+
+            <Link to={`/campaigns/${_id}/view`}>
+              <MenuItem onClick={handleClose} disableRipple sx={{ fontSize: '14px' }}>
+                <IconButton size='small' component='span' sx={{ marginRight: '10px' }}>
+                  <VisibilityIcon fontSize='small' />
+                </IconButton>
+                Ver
+              </MenuItem>
+            </Link>
+
+            <Link to={`/campaigns/${_id}/edit`}>
+              <MenuItem onClick={handleClose} disableRipple sx={{ fontSize: '14px' }}>
+                <IconButton component='span' size='small' sx={{ marginRight: '10px' }}>
+                  <ModeEditIcon fontSize='small' />
+                </IconButton>
+                Editar
+              </MenuItem>
+            </Link>
+
+            {['draft', 'pending', 'cancel'].includes(status) &&
+            (
+              <MenuItem
+                onClick={() => {
+                  handleClose()
+                  onDelete(item)
+                }} disableRipple
+                sx={{ fontSize: '14px' }}
+              >
+                <Link to={`/campaigns/${_id}/edit`}>
+                  <IconButton size='small' sx={{ marginRight: '10px' }}>
+                    <DeleteIcon fontSize='small' />
+                  </IconButton>
+                </Link>
+                Eliminar
+              </MenuItem>)}
+          </Menu>
         </Box>
       </TableCell>
     </TableRow>

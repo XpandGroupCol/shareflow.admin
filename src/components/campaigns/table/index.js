@@ -10,12 +10,12 @@ import { useCallback, useState } from 'react'
 import ConfirmationModal from 'components/confirmationModal'
 import { useNotify } from 'hooks/useNotify'
 import { useMutation, useQueryClient } from 'react-query'
-import { deleteSector } from 'services/sectors'
-import { mutateLocalState } from 'utils/mutateLocalState'
-import { SECTORS } from 'configs/queryKeys'
+import { CAMPAINGS } from 'configs/queryKeys'
 import { useGetCampaigns } from 'hooks/useGetCampaigns'
 import EmptyData from 'components/emptyData'
 import ErrorRequest from 'components/errorRequest'
+import { deleteCampaign } from 'services/campaigns'
+import { GLOBAL_ERROR } from 'configs'
 
 const ListTable = () => {
   const { queryString, queryParams, setQueryParams } = useQueryParams()
@@ -27,22 +27,18 @@ const ListTable = () => {
 
   const notify = useNotify()
   const queryClient = useQueryClient()
-  const { mutateAsync, isLoading: loading } = useMutation(deleteSector)
+  const { mutateAsync: delelteSycn, isLoading: loading } = useMutation(deleteCampaign)
 
-  const handleSubmit = (e) => {
-    const toggleSector = !modalDelete.status
+  const onDelete = (e) => {
     e.preventDefault()
-    mutateAsync({
-      payload: { status: !modalDelete.status },
-      id: modalDelete._id
-    })
-      .then(({ data }) => {
-        mutateLocalState(queryClient, [SECTORS, queryString], data)
-        notify.success(`El sector se ha ${toggleSector ? 'activado' : 'desactivado'} correctamente`)
+    delelteSycn(modalDelete._id)
+      .then(() => {
+        queryClient.invalidateQueries([CAMPAINGS])
+        notify.success('La campaña se ha eliminado correctamente')
         setModalDelete()
       })
       .catch(() => {
-        notify.error('Ups, algo salio man')
+        notify.error(GLOBAL_ERROR)
       })
   }
 
@@ -50,8 +46,8 @@ const ListTable = () => {
     setQueryParams({ page })
   }
 
-  const toggleModalDelete = useCallback((sector = null) => () => {
-    setModalDelete(sector)
+  const toggleModalDelete = useCallback((campaign = null) => () => {
+    setModalDelete(campaign)
   }, [])
 
   if (isLoading) return <LoadingTable />
@@ -68,7 +64,7 @@ const ListTable = () => {
           <TableBody>
             {sectors.map((item) => (
               <ItemRow
-                onDelete={toggleModalDelete}
+                onDelete={toggleModalDelete(item)}
                 key={item._id}
                 item={item}
               />
@@ -84,9 +80,10 @@ const ListTable = () => {
       <ConfirmationModal
         open={Boolean(modalDelete)}
         onClose={toggleModalDelete()}
-        onSubmit={handleSubmit}
+        onSubmit={onDelete}
         loading={loading}
         condition={modalDelete?.status || false}
+        text='Estas seguro que deseas elimiar la campaña?'
       />
     </>
   )

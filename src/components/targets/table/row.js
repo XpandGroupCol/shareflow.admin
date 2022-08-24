@@ -8,9 +8,9 @@ import { TARGET_CATEGORIES } from 'configs/lists'
 
 const getCategories = (category = []) => {
   const categories = []
-  TARGET_CATEGORIES.forEach(({ value }) => {
+  TARGET_CATEGORIES.forEach(({ value, label }) => {
     if (category.includes(value)) {
-      categories.push(value)
+      categories.push(label)
     }
   })
 

@@ -7,7 +7,7 @@ import { Divider } from '@mui/material'
 
 import Typography from 'components/typography'
 
-const ConfirmationModal = ({ open, onClose, onSubmit, loading, condition }) => {
+const ConfirmationModal = ({ open, onClose, onSubmit, loading, condition, text = '' }) => {
   return (
     <Dialog
       fullWidth
@@ -24,7 +24,7 @@ const ConfirmationModal = ({ open, onClose, onSubmit, loading, condition }) => {
       <Divider />
       <DialogContent>
         <Typography sx={{ padding: '20px 0' }}>
-          Estas seguro que deseas {!condition ? 'activar' : 'desactivar'} el registro ?
+          {text || `Estas seguro que deseas ${!condition ? 'activar' : 'desactivar'} el registro ?`}
         </Typography>
       </DialogContent>
       <DialogActions>

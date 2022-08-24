@@ -2,6 +2,7 @@ import { Box, CircularProgress, IconButton, TableCell, TableRow } from '@mui/mat
 
 import MarkAsUnreadIcon from '@mui/icons-material/MarkAsUnread'
 import Typography from 'components/typography'
+import Button from 'components/button'
 const ItemRow = ({ item, onSend, loading }) => {
   const { name, phone, email, lastName, sendEmail } = item
   return (
@@ -20,14 +21,22 @@ const ItemRow = ({ item, onSend, loading }) => {
       </TableCell>
       <TableCell>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-          <IconButton size='small' onClick={onSend(item)}>
-            {loading === item._id
-              ? <CircularProgress size={16} />
-              : (
-                <Box>
-                  <MarkAsUnreadIcon fontSize='small' color={sendEmail ? 'success' : 'initial'} /> {sendEmail ? <Typography fontSize='12px' color='#229a16'>Reenviar</Typography> : ''}
-                </Box>)}
-          </IconButton>
+
+          {loading === item._id
+            ? <CircularProgress size={16} />
+            : !sendEmail
+                ? (
+                  <IconButton size='small' onClick={onSend(item)}>
+                    <MarkAsUnreadIcon fontSize='small' />
+                  </IconButton>
+                  )
+                : (
+                  <Button color='success' size='small' onClick={onSend(item)}>
+                    <MarkAsUnreadIcon fontSize='small' sx={{ marginRight: '10px' }} />
+                    <Typography fontSize='12px'>Reenviar</Typography>
+                  </Button>
+                  )}
+
         </Box>
       </TableCell>
     </TableRow>

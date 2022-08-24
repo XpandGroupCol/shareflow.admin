@@ -1,0 +1,52 @@
+.rowFields {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+}
+
+.publisherTitle{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tableRow{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+    flex: 1;
+    
+}
+
+.tableRow > div {
+    width: 30%;
+
+}
+
+
+.rowContainer{
+    display: flex;
+    align-items: center;
+}
+
+
+@media screen and (max-width: 600px) {
+    .rowFields {
+       flex-direction: column;
+    }
+
+    .tableRow > div {
+        width: 100%;
+    }
+
+    .rowContainer{
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+    }
+
+    .rowContainer > .tableRow {
+        order:  2;
+    }
+}
