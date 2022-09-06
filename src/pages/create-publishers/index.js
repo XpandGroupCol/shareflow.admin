@@ -20,7 +20,8 @@ const defaultValues = {
   ageRange: [],
   sex: '',
   miniBudget: null,
-  category: ''
+  category: '',
+  locations: []
 }
 
 const CreatePublisherPage = () => {
@@ -44,7 +45,7 @@ const CreatePublisherPage = () => {
     const _formats = normalizeFormats(formats)
 
     Object.entries(values).forEach(([key, value]) => {
-      if (key === 'ageRange') {
+      if (key === 'ageRange' || key === 'locations') {
         value.forEach((v, i) => {
           payload.append(`${key}[${i}]`, v?.value ?? '')
         })

@@ -13,7 +13,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Buttons from './buttons'
 
-const ItemRow = ({ item, onDelete, onRemember, onStart, onFinish }) => {
+const ItemRow = ({ item, onDelete }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -22,6 +22,8 @@ const ItemRow = ({ item, onDelete, onRemember, onStart, onFinish }) => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  console.log({ item })
 
   const { brand, name, amount, logo, status, ages, sex, _id, user, userPercentage = 0 } = item
   const localState = TAG_COLOR[status] || {}
@@ -40,7 +42,9 @@ const ItemRow = ({ item, onDelete, onRemember, onStart, onFinish }) => {
         <Box sx={{ display: 'flex', gap: '10px' }}>
           <Avatar src={user?.avatar?.url || ''} label={user?.name} />
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography fontWeight='bold' fontSize='0.875rem' color='#4b494f'>{user?.name}</Typography>
+            <Link to={`/users/edit/${user?._id}`}>
+              <Typography fontWeight='bold' fontSize='0.875rem' color='#4b494f'>{user?.name}</Typography>
+            </Link>
             <Typography fontSize='12px' color='#4b494f'>%{userPercentage}</Typography>
           </Box>
         </Box>
@@ -91,14 +95,16 @@ const ItemRow = ({ item, onDelete, onRemember, onStart, onFinish }) => {
               </MenuItem>
             </Link>
 
-            <Link to={`/campaigns/${_id}/edit`}>
-              <MenuItem onClick={handleClose} disableRipple sx={{ fontSize: '14px' }}>
-                <IconButton component='span' size='small' sx={{ marginRight: '10px' }}>
-                  <ModeEditIcon fontSize='small' />
-                </IconButton>
-                Editar
-              </MenuItem>
-            </Link>
+            {!['draft', 'pending', 'completed'].includes(status) && (
+              <Link to={`/campaigns/${_id}/edit`}>
+                <MenuItem onClick={handleClose} disableRipple sx={{ fontSize: '14px' }}>
+                  <IconButton component='span' size='small' sx={{ marginRight: '10px' }}>
+                    <ModeEditIcon fontSize='small' />
+                  </IconButton>
+                  Editar
+                </MenuItem>
+              </Link>
+            )}
 
             {['draft', 'pending', 'cancel'].includes(status) &&
             (

@@ -2,7 +2,8 @@ import { forwardRef } from 'react'
 import MuiAutocomplete from '@mui/material/Autocomplete'
 import Input from 'components/input'
 import { renderlist } from './listItems'
-import Typography from 'components/typography'
+import { Chip } from '@mui/material'
+// import Typography from 'components/typography'
 
 const Autocomplete = forwardRef(({
   placeholder, options, label, multiple = false,
@@ -21,17 +22,23 @@ const Autocomplete = forwardRef(({
     value={value}
     size={size}
     fullWidth
-    limitTags={1}
-    renderTags={(values) => {
-      if (values.length) {
+    // limitTags={1}
+    // renderTags={(values) => {3
+    //   if (values.length) {
+    //     return (
+    //       <Typography component='span'>
+    //         {values.length > 1 ? 'Varios' : value[0].label}
+    //       </Typography>
+    //     )
+    //   }
+    //   return ''
+    // }}
+    renderTags={(value, getTagProps) =>
+      value.map((option, index) => {
         return (
-          <Typography component='span'>
-            {values.length > 1 ? 'varios' : value[0].label}
-          </Typography>
+          <Chip key={option.value} variant='outlined' label={option?.label} {...getTagProps({ index })} />
         )
-      }
-      return ''
-    }}
+      })}
     {...props}
     renderInput={(params) =>
       <Input label={label} error={error} helperText={helperText} {...params} size={size} />}

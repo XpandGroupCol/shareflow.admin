@@ -6,7 +6,7 @@ import ToggleOnIcon from '@mui/icons-material/ToggleOn'
 import StatusTag from 'components/statusTag'
 import Avatar from 'components/avatar'
 import Typography from 'components/typography'
-import { getSex, getAges } from 'utils/normalizeData'
+import { getSex, getAges, getFormatedNumber } from 'utils/normalizeData'
 import { Link } from 'react-router-dom'
 
 const ItemRow = ({ item, onDelete }) => {
@@ -18,7 +18,7 @@ const ItemRow = ({ item, onDelete }) => {
           <Avatar src={logo?.url} label={publisher} />
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography fontWeight='bold' fontSize='0.875rem' color='#4b494f'>{publisher}</Typography>
-            <Typography fontSize='12px' color='#4b494f'>{miniBudget}</Typography>
+            <Typography fontSize='12px' color='#4b494f'> $ {getFormatedNumber(miniBudget) || 0}</Typography>
           </Box>
         </Box>
       </TableCell>

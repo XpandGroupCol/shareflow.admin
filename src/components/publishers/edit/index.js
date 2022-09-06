@@ -26,9 +26,10 @@ const EditPublisher = ({ publisher, ages, targets }) => {
 
   const { isLoading: updatedIsLoading, mutateAsync: changeLogo } = useMutation(uploadPublisherfile)
 
-  const onSubmit = async ({ ageRange, formats, ...values }) => {
+  const onSubmit = async ({ ageRange, formats, locations, ...values }) => {
     const payload = {
       ...values,
+      locations: locations.map(({ value }) => value),
       ageRange: ageRange.map(({ value }) => value),
       formats: normalizeFormats(formats),
       logo
@@ -76,7 +77,6 @@ const EditPublisher = ({ publisher, ages, targets }) => {
       <section className='headerSection'>
         <Typography fontSize='24px' component='h2' fontWeight='bold'>Editar Publisher</Typography>
       </section>
-
       <Box sx={{
         width: '90%',
         maxWidth: '800px',
@@ -86,19 +86,15 @@ const EditPublisher = ({ publisher, ages, targets }) => {
         borderRadius: '8px'
       }}
       >
-
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '30px' }}>
           <ChangeAvatar onEdit={onEdit} onDelete={onDelete} src={logo?.url || ''} label='Cambiar foto' loading={updatedIsLoading} />
-
         </Box>
-
         <PublisherForm
           isLoading={isLoading}
           onSubmit={onSubmit}
           defaultValues={publisher}
           {...{ ages, targets }}
         />
-
       </Box>
     </>
   )

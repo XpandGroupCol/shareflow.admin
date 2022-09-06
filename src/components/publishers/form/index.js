@@ -20,6 +20,8 @@ import AutocompleteFormats from 'components/autocompleteFormats'
 import AutocompleteLocations from 'components/autocompleteLocations'
 
 const PublisherForm = ({ defaultValues, onSubmit, isLoading, ages, targets }) => {
+  console.log({ defaultValues })
+
   const { formState: { errors }, handleSubmit, control } = useForm({
     defaultValues: { ...defaultValues },
     resolver: yupResolver(schema)
@@ -54,7 +56,6 @@ const PublisherForm = ({ defaultValues, onSubmit, isLoading, ages, targets }) =>
   return (
 
     <Box component='form' sx={{ display: 'flex', flexDirection: 'column', gap: '24px' }} onSubmit={handleSubmit(onSubmit)}>
-
       <div className={styles.rowFields}>
         <ControllerField
           name='publisher'
@@ -76,17 +77,18 @@ const PublisherForm = ({ defaultValues, onSubmit, isLoading, ages, targets }) =>
         />
 
       </div>
+      <ControllerField
+        name='locations'
+        label='Ubicaciones'
+        control={control}
+        size='normal'
+        element={AutocompleteLocations}
+        multiple
+        error={Boolean(errors?.locations?.message)}
+        helperText={errors?.locations?.message}
+      />
       <div className={styles.rowFields}>
-        <ControllerField
-          name='locations'
-          label='Ubicaciones'
-          control={control}
-          size='normal'
-          element={AutocompleteLocations}
-          multiple
-          error={Boolean(errors?.locations?.message)}
-          helperText={errors?.locations?.message}
-        />
+
         <ControllerField
           name='category'
           label='Seleccione una categoria'

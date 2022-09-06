@@ -6,7 +6,7 @@ import OrderTable from 'components/orderTable'
 import StatusTag from 'components/statusTag'
 import Typography from 'components/typography'
 import { TAG_COLOR } from 'configs/campaigns'
-import { getFormatedNumber, parseDate } from 'utils/normalizeData'
+import { getFormatedNumber, getSex, parseDate } from 'utils/normalizeData'
 import styles from './details.module.css'
 import { useDownloadPDF } from 'hooks/useDownloadPDF'
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
@@ -79,6 +79,22 @@ const CampaignDetails = ({ campaing }) => {
         </section>
         <Divider sx={{ margin: '20px 0' }} />
         <Typography sx={{ fontWeight: 'bold', fontSize: '20px' }}>Segmentación de la campaña</Typography>
+        <Box sx={{ display: 'flex', gap: '10px' }}>
+          <Typography fontSize='16px' fontWeight='bold'>Sexo:</Typography>
+          <Typography>{getSex(campaing?.sex)}</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', gap: '10px' }}>
+          <Typography fontSize='16px' fontWeight='bold'>Sector: </Typography>
+          <Typography>{campaing?.sector?.label}</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', gap: '10px' }}>
+          <Typography fontSize='16px' fontWeight='bold'>Edades: </Typography>
+          <Typography>{campaing?.ages.map(({ label }) => label).join(', ')}</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+          <Typography fontSize='16px' fontWeight='bold'>Ubicaciones: </Typography>
+          <Typography>{campaing?.locations.map(({ label }) => label).join(' - ')}</Typography>
+        </Box>
         <OrderTable
           data={campaing?.publishers || []}
           target={campaing?.target?.label}

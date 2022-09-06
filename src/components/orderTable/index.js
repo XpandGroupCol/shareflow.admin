@@ -1,9 +1,12 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { getFormatedNumber } from 'utils/normalizeData'
+import { getFormatedNumber, getTotal } from 'utils/normalizeData'
 
 const OrderTable = ({
   data = [], summary = {}, target
+
 }) => {
+  const amount = summary?.grossValue + summary?.serviceFee
+  const { iva, total } = getTotal(amount)
   return (
     <TableContainer>
       <Table sx={{ minWidth: 800 }} aria-label='simple table'>
@@ -45,8 +48,18 @@ const OrderTable = ({
           </TableRow>
           <TableRow>
             <TableCell colSpan={2} />
+            <TableCell colSpan={3} sx={{ fontWeight: 'bold' }}>Sub total:</TableCell>
+            <TableCell align='right' sx={{ fontWeight: 'bold' }}>${getFormatedNumber(amount)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={2} />
+            <TableCell colSpan={3} sx={{ fontWeight: 'bold' }}>Iva:</TableCell>
+            <TableCell align='right' sx={{ fontWeight: 'bold' }}>${getFormatedNumber(iva)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={2} />
             <TableCell colSpan={3} sx={{ fontWeight: 'bold' }}>Total:</TableCell>
-            <TableCell align='right' sx={{ fontWeight: 'bold' }}>${getFormatedNumber(summary?.grossValue + summary?.serviceFee)}</TableCell>
+            <TableCell align='right' sx={{ fontWeight: 'bold' }}>${getFormatedNumber(total)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
