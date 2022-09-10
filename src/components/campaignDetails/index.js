@@ -42,12 +42,16 @@ const CampaignDetails = ({ campaing }) => {
               <Typography fontSize='16px' fontWeight='bold'>Campaña:</Typography>
               <Typography>{campaing?.name}</Typography>
             </Box>
-            <Box sx={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+            <Box sx={{ display: 'flex', gap: '10px' }}>
               <Typography fontSize='16px' fontWeight='bold'>Marca:</Typography>
               <Typography>{campaing?.brand}</Typography>
             </Box>
+            <Box sx={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+              <Typography fontSize='16px' fontWeight='bold'>Url:</Typography>
+              <Typography>{campaing?.url}</Typography>
+            </Box>
             <Box sx={{ display: 'flex', gap: '10px' }}>
-              <Typography fontSize='16px' fontWeight='bold'>Fechas:</Typography>
+              <Typography fontSize='16px' fontWeight='bold'>Periodo:</Typography>
               <Typography>{parseDate(campaing?.startDate)} - {parseDate(campaing?.endDate)}</Typography>
             </Box>
             <Box sx={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
