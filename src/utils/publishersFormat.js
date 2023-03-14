@@ -213,3 +213,5 @@ export const normalizeFormats = (data) => {
     }
   })
 }
+
+export const transformOrderNumber = (number) => number?.toString()?.padStart(7, '0') || ''

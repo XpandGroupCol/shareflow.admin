@@ -1,19 +1,20 @@
 export const columns = [
   {
+    name: '# Orden'
+  },
+  {
     name: 'Campaña'
   },
   {
     name: 'Usuario'
   },
   {
-    name: 'Precio',
+    name: 'Precio / Comisión',
+    align: 'right'
+  },
+  {
+    name: 'detalle de segmentación',
     align: 'center'
-  },
-  {
-    name: 'Sexo'
-  },
-  {
-    name: 'Rangos de edad'
   },
   {
     name: 'Estado',

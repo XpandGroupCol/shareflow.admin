@@ -20,8 +20,6 @@ import AutocompleteFormats from 'components/autocompleteFormats'
 import AutocompleteLocations from 'components/autocompleteLocations'
 
 const PublisherForm = ({ defaultValues, onSubmit, isLoading, ages, targets }) => {
-  console.log({ defaultValues })
-
   const { formState: { errors }, handleSubmit, control } = useForm({
     defaultValues: { ...defaultValues },
     resolver: yupResolver(schema)

@@ -12,6 +12,8 @@ import { useState } from 'react'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Buttons from './buttons'
+import { transformOrderNumber } from 'utils/publishersFormat'
+import { WhatsappIcon } from 'assets/icons'
 
 const ItemRow = ({ item, onDelete }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -23,12 +25,13 @@ const ItemRow = ({ item, onDelete }) => {
     setAnchorEl(null)
   }
 
-  console.log({ item })
-
-  const { brand, name, amount, logo, status, ages, sex, _id, user, userPercentage = 0 } = item
+  const { brand, name, amount, logo, status, ages, sex, _id, user, userPercentage = 0, orderNumber = 0 } = item
   const localState = TAG_COLOR[status] || {}
   return (
     <TableRow>
+      <TableCell>
+        {transformOrderNumber(orderNumber)}
+      </TableCell>
       <TableCell>
         <Box sx={{ display: 'flex', gap: '10px' }}>
           <Avatar src={logo?.url || ''} label={name} />
@@ -39,24 +42,28 @@ const ItemRow = ({ item, onDelete }) => {
         </Box>
       </TableCell>
       <TableCell>
-        <Box sx={{ display: 'flex', gap: '10px' }}>
+        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <Avatar src={user?.avatar?.url || ''} label={user?.name} />
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Link to={`/users/edit/${user?._id}`}>
               <Typography fontWeight='bold' fontSize='0.875rem' color='#4b494f'>{user?.name}</Typography>
             </Link>
-            <Typography fontSize='12px' color='#4b494f'>%{userPercentage}</Typography>
+            {user?.phone && (
+              <a href={`https://wa.me/${user?.phone}`} className='whatsappLink' target='_blank' rel='noreferrer'>
+                <WhatsappIcon width={16} height={16} />
+                Contactar
+              </a>
+            )}
           </Box>
         </Box>
       </TableCell>
-      <TableCell align='center'>
-        {getFormatedNumber(amount)}
+      <TableCell align='right'>
+        <Typography sx={{ fontSize: 'inherit' }} fontWeight='bold'>${getFormatedNumber(amount)}</Typography>
+        <Typography fontSize='13px' color='#4b494f'>%{userPercentage}</Typography>
       </TableCell>
       <TableCell>
-        {getSex(sex)}
-      </TableCell>
-      <TableCell>
-        {getAges(ages)}
+        <Typography sx={{ fontSize: 'inherit' }}> {getAges(ages)}</Typography>
+        <Typography sx={{ fontSize: 'inherit' }}> {getSex(sex)}</Typography>
       </TableCell>
       <TableCell align='center'>
         {localState?.label ? <StatusTag label={localState?.label} color={localState?.color} /> : ''}

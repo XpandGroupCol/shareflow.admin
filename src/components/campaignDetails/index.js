@@ -11,6 +11,7 @@ import styles from './details.module.css'
 import { useDownloadPDF } from 'hooks/useDownloadPDF'
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
 import { Link } from 'react-router-dom'
+import { transformOrderNumber } from 'utils/publishersFormat'
 
 const CampaignDetails = ({ campaing }) => {
   const localState = TAG_COLOR[campaing?.status] || {}
@@ -36,7 +37,7 @@ const CampaignDetails = ({ campaing }) => {
           <div className={styles.information}>
             <Box sx={{ display: 'flex', gap: '10px' }}>
               <Typography fontSize='16px' fontWeight='bold'>Número de orden:</Typography>
-              <Typography>{campaing?.orderNumber?.toString()?.padStart(7, '0') || ''}</Typography>
+              <Typography>{transformOrderNumber(campaing?.orderNumber)}</Typography>
             </Box>
             <Box sx={{ display: 'flex', gap: '10px' }}>
               <Typography fontSize='16px' fontWeight='bold'>Campaña:</Typography>
