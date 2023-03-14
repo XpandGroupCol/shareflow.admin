@@ -16,11 +16,13 @@ import EmptyData from 'components/emptyData'
 import ErrorRequest from 'components/errorRequest'
 import { deleteCampaign } from 'services/campaigns'
 import { GLOBAL_ERROR } from 'configs'
+import SegmentationModal from '../segmentationModal'
 
 const ListTable = () => {
   const { queryString, queryParams, setQueryParams } = useQueryParams()
 
   const { data = {}, isLoading, isError } = useGetCampaigns(queryString)
+  const [detail, setDetail] = useState(null)
 
   const [modalDelete, setModalDelete] = useState(null)
   const { data: sectors = [], pages } = data
@@ -50,6 +52,10 @@ const ListTable = () => {
     setModalDelete(campaign)
   }, [])
 
+  const handleSetDetail = (item) => () => {
+    setDetail(item)
+  }
+
   if (isLoading) return <LoadingTable />
 
   if (isError) return <ErrorRequest />
@@ -67,6 +73,7 @@ const ListTable = () => {
                 onDelete={toggleModalDelete(item)}
                 key={item._id}
                 item={item}
+                onDetail={handleSetDetail}
               />
             ))}
           </TableBody>
@@ -85,6 +92,7 @@ const ListTable = () => {
         condition={modalDelete?.status || false}
         text='Estas seguro que deseas elimiar la campaña?'
       />
+      <SegmentationModal open={Boolean(detail)} item={detail} onClose={handleSetDetail(null)} />
     </>
   )
 }

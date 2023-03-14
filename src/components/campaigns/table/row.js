@@ -1,10 +1,10 @@
-import { Box, IconButton, Menu, MenuItem, TableCell, TableRow } from '@mui/material'
+import { Box, Button, IconButton, Menu, MenuItem, TableCell, TableRow } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import StatusTag from 'components/statusTag'
 import Avatar from 'components/avatar'
 import Typography from 'components/typography'
-import { getSex, getAges, getFormatedNumber } from 'utils/normalizeData'
+import { getFormatedNumber } from 'utils/normalizeData'
 import { Link } from 'react-router-dom'
 import { TAG_COLOR } from 'configs/campaigns'
 
@@ -13,9 +13,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Buttons from './buttons'
 import { transformOrderNumber } from 'utils/publishersFormat'
-import { WhatsappIcon } from 'assets/icons'
 
-const ItemRow = ({ item, onDelete }) => {
+import WhatsappButton from 'components/whatsappButton'
+
+const ItemRow = ({ item, onDelete, onDetail }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -25,7 +26,7 @@ const ItemRow = ({ item, onDelete }) => {
     setAnchorEl(null)
   }
 
-  const { brand, name, amount, logo, status, ages, sex, _id, user, userPercentage = 0, orderNumber = 0 } = item
+  const { brand, name, amount, logo, status, _id, user, userPercentage = 0, orderNumber = 0 } = item
   const localState = TAG_COLOR[status] || {}
   return (
     <TableRow>
@@ -44,15 +45,12 @@ const ItemRow = ({ item, onDelete }) => {
       <TableCell>
         <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <Avatar src={user?.avatar?.url || ''} label={user?.name} />
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
             <Link to={`/users/edit/${user?._id}`}>
               <Typography fontWeight='bold' fontSize='0.875rem' color='#4b494f'>{user?.name}</Typography>
             </Link>
             {user?.phone && (
-              <a href={`https://wa.me/${user?.phone}`} className='whatsappLink' target='_blank' rel='noreferrer'>
-                <WhatsappIcon width={16} height={16} />
-                Contactar
-              </a>
+              <WhatsappButton number={user?.phone} />
             )}
           </Box>
         </Box>
@@ -61,9 +59,11 @@ const ItemRow = ({ item, onDelete }) => {
         <Typography sx={{ fontSize: 'inherit' }} fontWeight='bold'>${getFormatedNumber(amount)}</Typography>
         <Typography fontSize='13px' color='#4b494f'>%{userPercentage}</Typography>
       </TableCell>
-      <TableCell>
-        <Typography sx={{ fontSize: 'inherit' }}> {getAges(ages)}</Typography>
-        <Typography sx={{ fontSize: 'inherit' }}> {getSex(sex)}</Typography>
+      <TableCell align='center'>
+        <Button variant='outlined' size='small' onClick={onDetail(item)}>
+          <VisibilityIcon fontSize='small' sx={{ marginRight: '10px' }} />
+          segmentación
+        </Button>
       </TableCell>
       <TableCell align='center'>
         {localState?.label ? <StatusTag label={localState?.label} color={localState?.color} /> : ''}

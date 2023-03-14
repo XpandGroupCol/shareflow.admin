@@ -1,4 +1,4 @@
-import { Avatar, Box, IconButton, TableCell, TableRow } from '@mui/material'
+import { Box, IconButton, TableCell, TableRow } from '@mui/material'
 
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import ToggleOffIcon from '@mui/icons-material/ToggleOff'
@@ -8,6 +8,8 @@ import Typography from 'components/typography'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import WatchLaterIcon from '@mui/icons-material/WatchLater'
 import { Link } from 'react-router-dom'
+import WhatsappButton from 'components/whatsappButton'
+import Avatar from 'components/avatar'
 
 const getFullName = (name, lastName) => `${name} ${lastName}`
 
@@ -26,10 +28,10 @@ const ItemRow = ({ item, onDelete }) => {
         </Box>
       </TableCell>
       <TableCell>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '3px' }}>
           <Typography fontWeight='bold' fontSize='0.875rem' color='#4b494f'>{company}</Typography>
-          <Typography fontSize='12px' color='#4b494f'>{companyEmail}</Typography>
-          <Typography fontSize='12px' color='#4b494f'>{phone}</Typography>
+          <Typography fontSize='13px' color='#4b494f'>{companyEmail}</Typography>
+          {phone && <WhatsappButton number={phone} />}
         </Box>
       </TableCell>
       <TableCell>
