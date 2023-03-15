@@ -10,8 +10,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 const ItemRow = ({ item, onSend, loading }) => {
   const { name, phone, email, lastName, sendEmail, hasUser } = item
 
-  console.log({ hasUser })
-
   return (
     <TableRow>
       <TableCell>
