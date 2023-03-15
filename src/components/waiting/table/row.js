@@ -3,6 +3,8 @@ import { Box, CircularProgress, IconButton, TableCell, TableRow } from '@mui/mat
 import MarkAsUnreadIcon from '@mui/icons-material/MarkAsUnread'
 import Typography from 'components/typography'
 import Button from 'components/button'
+import WhatsappButton from 'components/whatsappButton'
+
 const ItemRow = ({ item, onSend, loading }) => {
   const { name, phone, email, lastName, sendEmail } = item
   return (
@@ -17,7 +19,9 @@ const ItemRow = ({ item, onSend, loading }) => {
         {email}
       </TableCell>
       <TableCell>
-        {phone}
+        <Box>
+          <WhatsappButton number={phone} />
+        </Box>
       </TableCell>
       <TableCell>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
