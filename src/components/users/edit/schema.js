@@ -12,7 +12,7 @@ export const defaultValues = {
   companyEmail: '',
   rut: null,
   avatar: null,
-  percentage: 15,
+  percentage: 0,
   checkRut: false
 }
 

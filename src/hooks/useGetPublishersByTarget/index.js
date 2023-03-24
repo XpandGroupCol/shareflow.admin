@@ -22,7 +22,7 @@ export const useGetPublishersByTarget = () => {
       const filters = setPayload(payload)
       const { data: listOffPublishers, user } = await getPublishersByTarget(filters)
       setLoading(false)
-      return Promise.resolve({ listOffPublishers, percentage: user?.percentage || 15 })
+      return Promise.resolve({ listOffPublishers, percentage: user?.percentage || 0 })
     } catch (e) {
       setLoading(false)
       notify.error(GLOBAL_ERROR)
